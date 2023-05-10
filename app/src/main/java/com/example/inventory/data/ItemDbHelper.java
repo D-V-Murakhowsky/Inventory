@@ -93,13 +93,21 @@ public class ItemDbHelper extends SQLiteOpenHelper{
         List<SearchResult> searchResults = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                SearchResult result = new SearchResult();
-                result.setId( cursor.getInt( cursor.getColumnIndex( ItemEntry._ID ) ) );
-                result.setName( cursor.getString( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME ) ) );
-                result.setQuantity( cursor.getDouble( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY ) ) );
-                result.setPrice( cursor.getDouble( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_PRICE ) ) );
+                int idColumnIndex = cursor.getColumnIndex( ItemEntry._ID );
+                int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
+                int quantityColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY );
+                int priceColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_PRICE );
 
-                searchResults.add(result);
+                if ((idColumnIndex > - 1) && (nameColumnIndex > -1)
+                        && (quantityColumnIndex > -1) && (priceColumnIndex > -1)) {
+                    SearchResult result = new SearchResult();
+                    result.setId(cursor.getInt(idColumnIndex));
+                    result.setName(cursor.getString(nameColumnIndex));
+                    result.setQuantity(cursor.getDouble(quantityColumnIndex));
+                    result.setPrice(cursor.getDouble(priceColumnIndex));
+                    searchResults.add(result);
+                }
+
             }while(cursor.moveToNext());
         }
 
@@ -118,7 +126,10 @@ public class ItemDbHelper extends SQLiteOpenHelper{
         List<String> searchResults = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                searchResults.add( cursor.getString( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME ) ) );
+                int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
+                if (nameColumnIndex > -1) {
+                    searchResults.add(cursor.getString(nameColumnIndex));
+                }
             }while(cursor.moveToNext());
         }
 
@@ -142,13 +153,21 @@ public class ItemDbHelper extends SQLiteOpenHelper{
         List<SearchResult> searchResults = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                SearchResult result = new SearchResult();
-                result.setId( cursor.getInt( cursor.getColumnIndex( ItemEntry._ID ) ) );
-                result.setName( cursor.getString( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME ) ) );
-                result.setQuantity( cursor.getDouble( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY ) ) );
-                result.setPrice( cursor.getDouble( cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_PRICE ) ) );
+                int idColumnIndex = cursor.getColumnIndex( ItemEntry._ID );
+                int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
+                int quantityColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY );
+                int priceColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_PRICE );
 
-                searchResults.add(result);
+                if ((idColumnIndex > - 1) && (nameColumnIndex > -1)
+                        && (quantityColumnIndex > -1) && (priceColumnIndex > -1)) {
+                    SearchResult result = new SearchResult();
+                    result.setId(cursor.getInt(idColumnIndex));
+                    result.setName(cursor.getString(nameColumnIndex));
+                    result.setQuantity(cursor.getDouble(quantityColumnIndex));
+                    result.setPrice(cursor.getDouble(priceColumnIndex));
+                    searchResults.add(result);
+                }
+
             }while(cursor.moveToNext());
         }
 

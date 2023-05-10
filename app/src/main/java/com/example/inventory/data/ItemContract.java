@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 
 public class ItemContract {
 
-    // to prevent from accidently using this class
+    // to prevent from accidentally using this class
     // give it a private constructor
     private ItemContract() {}
 
@@ -17,7 +17,7 @@ public class ItemContract {
      * content authority is the package name for the app, which is guaranteed to be unique on the
      * device.
      */
-    public static final String CONTENT_AUTHORITY = "com.example.gerin.inventory";
+    public static final String CONTENT_AUTHORITY = "com.example.inventory";
 
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
@@ -59,70 +59,60 @@ public class ItemContract {
 
         /**
          * Unique ID number for the item (only for use in the database table).
-         *
          * Type: INTEGER
          */
         public final static String _ID = BaseColumns._ID;
 
         /**
          * Name of the item.
-         *
          * Type: TEXT (String)
          */
         public final static String COLUMN_ITEM_NAME ="name";
 
         /**
          * Quantity of the item.
-         *
          * Type: TEXT (Integer)
          */
         public final static String COLUMN_ITEM_QUANTITY = "quantity";
 
         /**
          * Price of the item.
-         *
          * Type: TEXT (Float)
          */
         public final static String COLUMN_ITEM_PRICE = "price";
 
         /**
          * Description of the product
-         *
          * Type: TEXT (String)
          */
         public final static String COLUMN_ITEM_DESCRIPTION = "description";
 
         /**
          * First tag for the item.
-         *
          * Type: TEXT (String)
          */
         public final static String COLUMN_ITEM_TAG1 = "tag1";
 
         /**
          * Second tag for the item.
-         *
          * Type: TEXT (String)
          */
         public final static String COLUMN_ITEM_TAG2 = "tag2";
 
         /**
          * Third tag for the item.
-         *
          * Type: TEXT (String)
          */
         public final static String COLUMN_ITEM_TAG3 = "tag3";
 
         /**
          * Image for the item.
-         *
          * Type: BLOB
          */
         public final static String COLUMN_ITEM_IMAGE = "image";
 
         /**
          * URI for the image
-         *
          * Type: TEXT
          */
         public final static String COLUMN_ITEM_URI = "imageuri";
