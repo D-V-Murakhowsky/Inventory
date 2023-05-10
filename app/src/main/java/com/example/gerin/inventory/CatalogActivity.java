@@ -7,15 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.ListViewCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -278,7 +277,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         });
 
         // On click method for suggestions
-        RecyclerView searchrv = findViewById(R.id.mt_recycler);
+        RecyclerView searchrv = findViewById(com.mancj.materialsearchbar.R.id.mt_recycler);
         searchrv.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), searchrv, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
