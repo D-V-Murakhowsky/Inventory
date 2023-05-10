@@ -1,4 +1,4 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -19,8 +19,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.gerin.inventory", appContext.getPackageName());
+        assertEquals("com.example.inventory", appContext.getPackageName());
     }
 }

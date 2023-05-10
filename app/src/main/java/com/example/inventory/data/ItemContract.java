@@ -1,4 +1,4 @@
-package com.example.gerin.inventory.data;
+package com.example.inventory.data;
 
 import android.content.ContentResolver;
 import android.net.Uri;

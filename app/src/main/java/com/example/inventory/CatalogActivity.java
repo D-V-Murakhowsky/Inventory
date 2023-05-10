@@ -1,4 +1,4 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+
+import com.example.gerin.inventory.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AlertDialog;
@@ -27,12 +29,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gerin.inventory.Search.CustomSuggestionsAdapter;
-import com.example.gerin.inventory.Search.RecyclerTouchListener;
-import com.example.gerin.inventory.Search.SearchAdapter;
-import com.example.gerin.inventory.Search.SearchResult;
-import com.example.gerin.inventory.data.ItemContract;
-import com.example.gerin.inventory.data.ItemDbHelper;
+import com.example.inventory.Search.CustomSuggestionsAdapter;
+import com.example.inventory.Search.RecyclerTouchListener;
+import com.example.inventory.Search.SearchAdapter;
+import com.example.inventory.Search.SearchResult;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 

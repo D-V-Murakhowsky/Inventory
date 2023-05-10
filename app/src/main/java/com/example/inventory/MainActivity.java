@@ -1,4 +1,4 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -8,6 +8,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.gerin.inventory.R;
 
 /* This file is used to create a splash screen */
 public class MainActivity extends AppCompatActivity {

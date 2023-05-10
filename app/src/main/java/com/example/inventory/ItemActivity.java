@@ -1,4 +1,4 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -22,7 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.gerin.inventory.data.ItemContract;
+import com.example.gerin.inventory.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayInputStream;

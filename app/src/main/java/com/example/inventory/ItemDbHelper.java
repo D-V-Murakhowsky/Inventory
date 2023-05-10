@@ -1,6 +1,5 @@
-package com.example.gerin.inventory.data;
+package com.example.inventory;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
-import com.example.gerin.inventory.Search.SearchResult;
-import com.example.gerin.inventory.data.ItemContract.ItemEntry;
+import com.example.inventory.Search.SearchResult;
+import com.example.inventory.ItemContract.ItemEntry;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.inventory.MainActivity"
             android:theme="@style/noTitle"
             android:exported="true">
             <intent-filter>
@@ -21,18 +21,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CatalogActivity"
+            android:name="com.example.inventory.CatalogActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".EditorActivity"
-            android:parentActivityName=".CatalogActivity" />
+            android:name="com.example.inventory.EditorActivity"
+            android:parentActivityName="com.example.inventory.CatalogActivity" />
         <activity
-            android:name=".ItemActivity"
-            android:parentActivityName=".CatalogActivity"
+            android:name="com.example.inventory.ItemActivity"
+            android:parentActivityName="com.example.inventory.CatalogActivity"
             android:theme="@style/noTitle" />
 
         <provider
-            android:name=".data.ItemProvider"
+            android:name="com.example.inventory.data.ItemProvider"
             android:authorities="com.example.gerin.inventory"
             android:exported="false" />
 

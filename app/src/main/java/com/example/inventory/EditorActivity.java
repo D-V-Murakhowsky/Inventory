@@ -1,4 +1,4 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,8 +14,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+
+import com.example.gerin.inventory.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import androidx.core.app.NavUtils;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +31,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.example.gerin.inventory.data.ItemContract;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

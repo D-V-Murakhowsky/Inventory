@@ -1,4 +1,4 @@
-package com.example.gerin.inventory.Search;
+package com.example.inventory.Search;
 
 
 import androidx.annotation.NonNull;

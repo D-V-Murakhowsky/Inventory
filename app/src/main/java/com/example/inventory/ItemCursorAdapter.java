@@ -1,15 +1,14 @@
-package com.example.gerin.inventory;
+package com.example.inventory;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.gerin.inventory.data.ItemContract;
+import com.example.gerin.inventory.R;
 
 import java.text.DecimalFormat;
 
