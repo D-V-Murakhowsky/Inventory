@@ -22,7 +22,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.gerin.inventory.R;
+import com.example.inventory.R;
+import com.example.inventory.data.ItemContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayInputStream;

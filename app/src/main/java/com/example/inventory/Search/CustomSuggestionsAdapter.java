@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.gerin.inventory.R;
+import com.example.inventory.R;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 class SuggestionHolder extends RecyclerView.ViewHolder{

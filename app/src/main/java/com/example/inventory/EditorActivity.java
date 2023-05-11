@@ -15,7 +15,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.example.gerin.inventory.R;
+import com.example.inventory.R;
+import com.example.inventory.data.ItemContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.app.NavUtils;

@@ -36,4 +36,9 @@
     <string name="discard">Discard changes</string>
     <string name="edit">Keep editing</string>
     <string name="sort_dialog_msg">Sort By</string>
+    <string name="todo">TODO</string>
+    <string name="switch_tabs_for_different_lists">Switch tabs for different lists</string>
+    <string name="tab_value_1">Поличкі</string>
+    <string name="tab_value_2">Товари</string>
+    <string name="hello_blank_fragment">Test value</string>
 </resources>

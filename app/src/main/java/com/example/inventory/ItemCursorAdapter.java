@@ -3,12 +3,12 @@ package com.example.inventory;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
-import android.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.example.gerin.inventory.R;
+import com.example.inventory.data.ItemContract;
 
 import java.text.DecimalFormat;
 

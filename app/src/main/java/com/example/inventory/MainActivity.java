@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gerin.inventory.R;
+import com.example.inventory.R;
 
 /* This file is used to create a splash screen */
 public class MainActivity extends AppCompatActivity {
