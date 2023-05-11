@@ -14,217 +14,200 @@
         <!-- Contains the text fields -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="914dp"
             android:layout_weight="0.6">
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_margin">
+
+                <!-- Contains item image -->
+                <ImageView
+                    android:id="@+id/edit_item_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:maxWidth="300dp"
+                    android:maxHeight="300dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/image_prompt" />
+
+                <!-- Contains all the item info -->
+                <LinearLayout
+                    android:layout_width="383dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/activity_margin">
+                    android:paddingTop="32dp"
+                    android:paddingBottom="32dp">
 
-                    <!-- Contains item image -->
-                    <ImageView
-                        android:id="@+id/edit_item_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="0.4"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_prompt"
-                        android:adjustViewBounds="true"
-                        android:maxWidth="300dp"
-                        android:maxHeight="300dp"
-                        android:clickable="true"/>
-
-                    <!-- Contains all the item info -->
+                    <!-- Overview category -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingTop="32dp"
-                        android:paddingBottom="32dp">
+                        android:orientation="horizontal">
 
-                        <!-- Overview category -->
+                        <!-- Label -->
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="@string/category_overview" />
+
+                        <!-- Input fields -->
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:paddingLeft="4dp">
 
-                            <!-- Label -->
-                            <TextView
-                                style="@style/CategoryStyle"
-                                android:text="@string/category_overview" />
+                            <!-- Name field -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <!-- Input fields -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:orientation="vertical"
-                                android:paddingLeft="4dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_name"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_name"
+                                    android:inputType="textCapWords" />
 
-                                <!-- Name field -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_name"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_name"
-                                        android:inputType="textCapWords"/>
+                            <!-- Quantity field -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_quantity"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_quantity"
+                                    android:inputType="numberSigned" />
 
-                                <!-- Quantity field -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_quantity"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_quantity"
-                                        android:inputType="numberSigned"/>
+                            <!-- Price field -->
 
-                                </com.google.android.material.textfield.TextInputLayout>
-
-                                <!-- Price field -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:weightSum="10">
-
-                                    <TextView
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="@string/dollarSign" />
-
-                                    <com.google.android.material.textfield.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <com.google.android.material.textfield.TextInputEditText
-                                            android:id="@+id/edit_item_price"
-                                            style="@style/EditorFieldStyle"
-                                            android:hint="@string/hint_item_price"
-                                            android:inputType="numberDecimal"/>
-
-                                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
 
                         </LinearLayout>
 
-                        <!-- Description category -->
+                    </LinearLayout>
+
+                    <!-- Description category -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="32dp">
+
+                        <!-- Label -->
+
+                        <!-- Description -->
+
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/category_description" />
+
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="32dp">
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:paddingLeft="4dp">
 
-                            <!-- Label -->
-                            <TextView
-                                style="@style/CategoryStyle"
-                                android:text="@string/category_description" />
+                            <!-- Description field -->
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_item_description"
+                                style="@style/EditorFieldStyle"
+                                android:hint="@string/hint_item_description"
+                                android:inputType="textCapWords" />
 
-                            <!-- Description -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:orientation="vertical"
-                                android:paddingLeft="4dp">
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="17dp">
 
-                                <!-- Description field -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_description"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_description"
-                                        android:inputType="textCapWords" />
-
-                                </com.google.android.material.textfield.TextInputLayout>
-
-                            </LinearLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
 
-                        <!-- Tags category -->
+                    </LinearLayout>
+
+                    <!-- Tags category -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="32dp">
+
+                        <!-- Label -->
+
+                        <!-- Tag fields -->
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="@string/category_tag" />
+
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="32dp">
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:paddingStart="4dp">
 
-                            <!-- Label -->
-                            <TextView
-                                style="@style/CategoryStyle"
-                                android:text="@string/category_tag" />
+                            <!-- Tag 1 -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <!-- Tag fields -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:orientation="vertical"
-                                android:paddingLeft="4dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_tag1"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_tag1"
+                                    android:inputType="textCapWords" />
 
-                                <!-- Tag 1 -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_tag1"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_tag1"
-                                        android:inputType="textCapWords"/>
+                            <!-- Tag 2 -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_tag2"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_tag2"
+                                    android:inputType="textCapWords" />
 
-                                <!-- Tag 2 -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_tag2"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_tag2"
-                                        android:inputType="textCapWords"/>
+                            <!-- Tag 3 -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                                </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_tag3"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_tag3"
+                                    android:inputType="textCapWords" />
 
-                                <!-- Tag 3 -->
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edit_item_tag3"
-                                        style="@style/EditorFieldStyle"
-                                        android:hint="@string/hint_item_tag3"
-                                        android:inputType="textCapWords"  />
-
-                                </com.google.android.material.textfield.TextInputLayout>
-
-                            </LinearLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 

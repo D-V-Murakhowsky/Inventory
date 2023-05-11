@@ -15,7 +15,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.example.inventory.R;
 import com.example.inventory.data.ItemContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -157,7 +156,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
-        mPriceEditText = (EditText) findViewById(R.id.edit_item_price);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
         mItemImageView = (ImageView) findViewById(R.id.edit_item_image);
         mTag1EditText = (EditText) findViewById(R.id.edit_item_tag1);
@@ -167,7 +165,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         mNameEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
-        mPriceEditText.setOnTouchListener(mTouchListener);
         mDescriptionEditText.setOnTouchListener(mTouchListener);
         mTag1EditText.setOnTouchListener(mTouchListener);
         mTag2EditText.setOnTouchListener(mTouchListener);
@@ -238,7 +235,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         ContentValues values = new ContentValues();
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_PRICE, priceDouble);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_TAG1, tag1String);
         values.put(ItemContract.ItemEntry.COLUMN_ITEM_TAG2, tag2String);
@@ -348,7 +344,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 ItemContract.ItemEntry._ID,
                 ItemContract.ItemEntry.COLUMN_ITEM_NAME,
                 ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                ItemContract.ItemEntry.COLUMN_ITEM_PRICE,
                 ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 ItemContract.ItemEntry.COLUMN_ITEM_TAG1,
                 ItemContract.ItemEntry.COLUMN_ITEM_TAG2,
@@ -378,7 +373,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-            int priceColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_PRICE);
             int descriptionColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
             int tag1ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG1);
             int tag2ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG2);
@@ -390,7 +384,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
             int quantity = data.getInt(quantityColumnIndex);
-            double price = data.getDouble(priceColumnIndex);
             String description = data.getString(descriptionColumnIndex);
             String tag1 = data.getString(tag1ColumnIndex);
             String tag2 = data.getString(tag2ColumnIndex);
@@ -405,8 +398,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mQuantityEditText.setText(Integer.toString(quantity));
-            DecimalFormat formatter = new DecimalFormat("#0.00");
-            mPriceEditText.setText(formatter.format(price));
             mDescriptionEditText.setText(description);
             mTag1EditText.setText(tag1);
             mTag2EditText.setText(tag2);

@@ -18,14 +18,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.inventory.CatalogActivity"
+            android:name="com.example.inventory.MainScreenActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.example.inventory.EditorActivity"
-            android:parentActivityName="com.example.inventory.CatalogActivity" />
+            android:parentActivityName="com.example.inventory.MainScreenActivity" />
         <activity
             android:name="com.example.inventory.ItemActivity"
-            android:parentActivityName="com.example.inventory.CatalogActivity"
+            android:parentActivityName="com.example.inventory.MainScreenActivity"
             android:theme="@style/noTitle" />
 
         <provider

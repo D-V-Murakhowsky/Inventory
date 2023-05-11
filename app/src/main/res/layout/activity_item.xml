@@ -50,12 +50,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Item info -->
+
+    <!-- FAB -->
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        app:layout_anchor="@+id/nestedScrollView"
+        app:layout_anchorGravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,24 +78,24 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/quantity_icon"
                     android:adjustViewBounds="true"
                     android:maxWidth="42dp"
                     android:maxHeight="42dp"
                     android:paddingTop="16dp"
                     android:paddingRight="16dp"
+                    android:src="@drawable/quantity_icon"
                     app:tint="@color/colorAccent" />
 
 
                 <TextView
                     style="@style/ItemCategoryStyle"
-                    android:text="In stock: " />
+                    android:text="@string/in_stock" />
 
                 <!-- Dummy view takes up maximum space to right align everything-->
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"></View>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/item_quantity_field"
@@ -98,41 +104,6 @@
             </LinearLayout>
 
             <!-- Price field -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/price_icon"
-                    android:adjustViewBounds="true"
-                    android:maxWidth="42dp"
-                    android:maxHeight="42dp"
-                    android:paddingTop="16dp"
-                    android:paddingRight="16dp"
-                    app:tint="@color/colorAccent" />
-
-                <TextView
-                    style="@style/ItemCategoryStyle"
-                    android:text="Price: " />
-
-                <!-- Dummy view takes up maximum space to right align everything-->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"></View>
-
-                <TextView
-                    style="@style/ItemFieldStyle"
-                    android:text="@string/dollarSign"/>
-
-                <TextView
-                    android:id="@+id/item_price_field"
-                    style="@style/ItemFieldStyle" />
-
-            </LinearLayout>
 
             <!-- Description field -->
             <LinearLayout
@@ -144,25 +115,25 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/description_icon"
                     android:adjustViewBounds="true"
                     android:maxWidth="42dp"
                     android:maxHeight="42dp"
                     android:paddingTop="16dp"
                     android:paddingRight="16dp"
+                    android:src="@drawable/description_icon"
                     app:tint="@color/colorAccent" />
 
                 <TextView
                     style="@style/ItemCategoryStyle"
-                    android:text="Description: " />
+                    android:text="@string/description" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/item_description_field"
-                android:paddingBottom="16dp"
                 style="@style/ItemFieldStyle"
-                android:paddingLeft="42dp"/>
+                android:paddingLeft="42dp"
+                android:paddingBottom="16dp" />
 
             <!-- Tags field -->
             <LinearLayout
@@ -174,45 +145,45 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/tag_icon"
                     android:adjustViewBounds="true"
                     android:maxWidth="42dp"
                     android:maxHeight="42dp"
                     android:paddingTop="16dp"
                     android:paddingRight="16dp"
+                    android:src="@drawable/tag_icon"
                     app:tint="@color/colorAccent" />
 
                 <!-- Tags label -->
                 <TextView
                     style="@style/ItemCategoryStyle"
-                    android:paddingBottom="16dp"
                     android:paddingRight="16dp"
-                    android:text="Tags: " />
+                    android:paddingBottom="16dp"
+                    android:text="@string/tags" />
 
                 <!-- Tags -->
                 <org.apmem.tools.layouts.FlowLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/item_tag1_field"
                         style="@style/TagStyle"
                         android:gravity="center"
-                        android:text="Tag1" />
+                        android:text="@string/tag1" />
 
                     <TextView
                         android:id="@+id/item_tag2_field"
                         style="@style/TagStyle"
                         android:gravity="center"
-                        android:text="Tag2" />
+                        android:text="@string/tag2" />
 
                     <TextView
                         android:id="@+id/item_tag3_field"
                         style="@style/TagStyle"
                         android:gravity="center"
-                        android:text="Tag3" />
+                        android:text="@string/tag3" />
 
                 </org.apmem.tools.layouts.FlowLayout>
 
@@ -222,7 +193,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/item_fab"
         android:layout_width="wrap_content"

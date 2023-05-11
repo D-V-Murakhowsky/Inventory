@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.example.inventory.data.ItemContract;
 
-import java.text.DecimalFormat;
-
 public class ItemCursorAdapter extends CursorAdapter {
 
     public ItemCursorAdapter(Context context, Cursor c, int flags) {
@@ -34,17 +32,13 @@ public class ItemCursorAdapter extends CursorAdapter {
         // Find the columns of item attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-        int priceColumnIndex = cursor.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_PRICE);
 
         // Read the item attributes from the Cursor for the current item
         String itemName = cursor.getString(nameColumnIndex);
         String itemQuantity = String.valueOf(cursor.getInt(quantityColumnIndex));
-        DecimalFormat formatter = new DecimalFormat("#0.00");
-        String itemPrice = formatter.format(cursor.getDouble(priceColumnIndex));
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(itemName);
         quantityTextView.setText(itemQuantity);
-        priceTextView.setText(itemPrice);
     }
 }

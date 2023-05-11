@@ -2,7 +2,6 @@ package com.example.inventory;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -10,7 +9,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 // TODO: 2018-07-08 add "tags" fields to the database
-public class CatalogActivity extends AppCompatActivity{
+public class MainScreenActivity extends AppCompatActivity{
 
 
     TabLayout tabLayout;
@@ -20,7 +19,7 @@ public class CatalogActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_catalog);
+        setContentView(R.layout.main_screen_activity);
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabs);
         viewPager.setAdapter(createCardAdapter());

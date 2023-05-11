@@ -9,8 +9,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.inventory.R;
-
 /* This file is used to create a splash screen */
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent catalogIntent = new Intent(MainActivity.this, CatalogActivity.class);
+                Intent catalogIntent = new Intent(MainActivity.this, MainScreenActivity.class);
                 startActivity(catalogIntent);
                 finish();
             }
