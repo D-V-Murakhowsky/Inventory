@@ -29,7 +29,7 @@
             android:theme="@style/noTitle" />
 
         <provider
-            android:name="com.example.inventory.data.ItemProvider"
+            android:name="com.example.inventory.data.DataProvider"
             android:authorities="com.example.inventory"
             android:exported="false" />
 

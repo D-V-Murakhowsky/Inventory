@@ -8,12 +8,12 @@ import android.util.Log;
 
 
 import com.example.inventory.Search.SearchResult;
-import com.example.inventory.data.ModelsContract.ItemEntry;
+import com.example.inventory.data.DbContract.ItemEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDbHelper extends SQLiteOpenHelper{
+public class DbHelper extends SQLiteOpenHelper{
 
     /**
      * Name of the database file.
@@ -34,7 +34,7 @@ public class ItemDbHelper extends SQLiteOpenHelper{
     /**
      * Constructs a new instance of ItemDbHelper
      */
-    public ItemDbHelper(Context context) {
+    public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;
@@ -82,9 +82,9 @@ public class ItemDbHelper extends SQLiteOpenHelper{
         String sortOrder = "ROWID LIMIT 5";
 
         String[] projection = {
-                ModelsContract.ItemEntry._ID,
-                ModelsContract.ItemEntry.COLUMN_ITEM_NAME,
-                ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY};
+                DbContract.ItemEntry._ID,
+                DbContract.ItemEntry.COLUMN_ITEM_NAME,
+                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY};
 
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection, null, null, null);
 
@@ -115,7 +115,7 @@ public class ItemDbHelper extends SQLiteOpenHelper{
     public List<String> getNames(){
 
         String[] projection = {
-                ModelsContract.ItemEntry.COLUMN_ITEM_NAME};
+                DbContract.ItemEntry.COLUMN_ITEM_NAME};
 
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection, null, null,null);
 
@@ -135,8 +135,8 @@ public class ItemDbHelper extends SQLiteOpenHelper{
     public List<SearchResult> getResultNames(String name){
 
         String[] projection = {
-                ModelsContract.ItemEntry._ID,
-                ModelsContract.ItemEntry.COLUMN_ITEM_NAME};
+                DbContract.ItemEntry._ID,
+                DbContract.ItemEntry.COLUMN_ITEM_NAME};
 
         String selection = ItemEntry.COLUMN_ITEM_NAME + " LIKE ?";
         String[] selectionArgs = new String[] {"&" + name + "%"};

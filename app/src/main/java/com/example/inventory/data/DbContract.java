@@ -4,11 +4,11 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class ModelsContract {
+public class DbContract {
 
     // to prevent from accidentally using this class
     // give it a private constructor
-    private ModelsContract() {}
+    private DbContract() {}
 
 
     /**

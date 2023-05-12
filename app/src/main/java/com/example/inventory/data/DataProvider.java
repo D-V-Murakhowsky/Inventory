@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.Log;
 
-public class ItemProvider extends ContentProvider{
+public class DataProvider extends ContentProvider{
 
 
     /** URI matcher code for the content URI for the items table */
@@ -19,6 +19,10 @@ public class ItemProvider extends ContentProvider{
 
     /** URI matcher code for the content URI for a single item in the items table */
     private static final int ITEM_ID = 101;
+
+    private static final int SHELVES = 102;
+
+    private static final int SHELF_ID = 103;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -34,24 +38,31 @@ public class ItemProvider extends ContentProvider{
         // when a match is found.
 
 
-        sUriMatcher.addURI(ModelsContract.CONTENT_AUTHORITY, ModelsContract.PATH_INVENTORY, ITEMS);
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY, DbContract.PATH_INVENTORY, ITEMS);
 
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY, DbContract.PATH_INVENTORY + "/#", ITEM_ID);
 
-        sUriMatcher.addURI(ModelsContract.CONTENT_AUTHORITY, ModelsContract.PATH_INVENTORY + "/#", ITEM_ID);
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY, DbContract.PATH_SHELVES, SHELVES);
+
+        sUriMatcher.addURI(DbContract.CONTENT_AUTHORITY, DbContract.PATH_SHELVES + "/#", SHELF_ID);
     }
 
     /** Database helper object */
-    private ItemDbHelper mDbHelper;
+    private DbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new ItemDbHelper(getContext());
+        mDbHelper = new DbHelper(getContext());
         return false;
     }
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri,
+                        @Nullable String[] projection,
+                        @Nullable String selection,
+                        @Nullable String[] selectionArgs,
+                        @Nullable String sortOrder) {
         // Get readable database
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
@@ -62,24 +73,40 @@ public class ItemProvider extends ContentProvider{
         int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-
                 //cursor containing all rows of the table
-                cursor = database.query(ModelsContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(DbContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
+
             case ITEM_ID:
 
                 // For every "?" in the selection, we need to have an element in the selection
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
-                selection = ModelsContract.ItemEntry._ID + "=?";
+                selection = DbContract.ItemEntry._ID + "=?";
                 //parseId follows convention where id is at the end of the uri
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 //cursor contains a single row specified by row ID
-                cursor = database.query(ModelsContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                cursor = database.query(DbContract.ItemEntry.TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
                 break;
+
+            case (SHELVES):
+                cursor = database.query(DbContract.ShelfEntry.TABLE_NAME, projection, selection,
+                        selectionArgs,null, null, sortOrder);
+                break;
+
+            case (SHELF_ID):
+                selection = DbContract.ShelfEntry._ID + "=?";
+                //parseId follows convention where id is at the end of the uri
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+
+                //cursor contains a single row specified by row ID
+                cursor = database.query(DbContract.ShelfEntry.TABLE_NAME, projection,
+                        selection, selectionArgs, null, null, sortOrder);
+                break;
+
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -99,9 +126,13 @@ public class ItemProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-                return ModelsContract.ItemEntry.CONTENT_LIST_TYPE;
+                return DbContract.ItemEntry.CONTENT_LIST_TYPE;
             case ITEM_ID:
-                return ModelsContract.ItemEntry.CONTENT_ITEM_TYPE;
+                return DbContract.ItemEntry.CONTENT_ITEM_TYPE;
+            case SHELVES:
+                return DbContract.ShelfEntry.CONTENT_LIST_TYPE;
+            case SHELF_ID:
+                return DbContract.ShelfEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
@@ -114,6 +145,8 @@ public class ItemProvider extends ContentProvider{
         switch (match) {
             case ITEMS:
                 return insertItem(uri, values);
+            case SHELVES:
+                return insertShelf(uri, values);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -121,7 +154,7 @@ public class ItemProvider extends ContentProvider{
 
     private Uri insertItem(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
+        String name = values.getAsString(DbContract.ItemEntry.COLUMN_ITEM_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Item requires a name");
         }
@@ -130,10 +163,35 @@ public class ItemProvider extends ContentProvider{
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
-        long id = database.insert(ModelsContract.ItemEntry.TABLE_NAME, null, values);
+        long id = database.insert(DbContract.ItemEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e("ItemProvider", "Failed to insert row for " + uri);
+            return null;
+        }
+
+//        // Notify all listeners that the data has changed for the item content URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, id);
+    }
+
+    private Uri insertShelf(Uri uri, ContentValues values) {
+        // Check that the name is not null
+        String name = values.getAsString(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Shelf requires a name");
+        }
+
+        // Get writable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Insert the new pet with the given values
+        long id = database.insert(DbContract.ShelfEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e("DataProvider", "Failed to insert row for " + uri);
             return null;
         }
 
@@ -156,13 +214,23 @@ public class ItemProvider extends ContentProvider{
         switch (match) {
             case ITEMS:
                 // Delete all rows that match the selection and selection args
-                rowsDeleted = database.delete(ModelsContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(DbContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case ITEM_ID:
                 // Delete a single row given by the ID in the URI
-                selection = ModelsContract.ItemEntry._ID + "=?";
+                selection = DbContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                rowsDeleted = database.delete(ModelsContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(DbContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SHELVES:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(DbContract.ShelfEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SHELF_ID:
+                // Delete a single row given by the ID in the URI
+                selection = DbContract.ShelfEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                rowsDeleted = database.delete(DbContract.ShelfEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -183,17 +251,23 @@ public class ItemProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-                return updatePet(uri, values, selection, selectionArgs);
+                return updateItem(uri, values, selection, selectionArgs);
             case ITEM_ID:
-                selection = ModelsContract.ItemEntry._ID + "=?";
+                selection = DbContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, values, selection, selectionArgs);
+                return updateItem(uri, values, selection, selectionArgs);
+            case SHELVES:
+                return updateShelf(uri, values, selection, selectionArgs);
+            case SHELF_ID:
+                selection = DbContract.ShelfEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateShelf(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
@@ -201,8 +275,8 @@ public class ItemProvider extends ContentProvider{
         }
 
         // TODO: 2018-07-07 handle this exception (check pets database for more info)
-        if (values.containsKey(ModelsContract.ItemEntry.COLUMN_ITEM_NAME)) {
-            String name = values.getAsString(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
+        if (values.containsKey(DbContract.ItemEntry.COLUMN_ITEM_NAME)) {
+            String name = values.getAsString(DbContract.ItemEntry.COLUMN_ITEM_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Pet requires a name");
             }
@@ -212,7 +286,38 @@ public class ItemProvider extends ContentProvider{
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Perform the update on the database and get the number of rows affected
-        int rowsUpdated = database.update(ModelsContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(DbContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // If 1 or more rows were updated, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Return the number of rows updated
+        return rowsUpdated;
+    }
+
+    private int updateShelf(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // TODO: 2018-07-07 handle this exception (check pets database for more info)
+        if (values.containsKey(DbContract.ShelfEntry.COLUMN_SHELF_NAME)) {
+            String name = values.getAsString(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Pet requires a name");
+            }
+        }
+
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(DbContract.ShelfEntry.TABLE_NAME, values, selection, selectionArgs);
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import com.example.inventory.data.ModelsContract;
+import com.example.inventory.data.DbContract;
 
 public class ItemCursorAdapter extends CursorAdapter {
 
@@ -30,8 +30,8 @@ public class ItemCursorAdapter extends CursorAdapter {
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
 
         // Find the columns of item attributes that we're interested in
-        int nameColumnIndex = cursor.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
-        int quantityColumnIndex = cursor.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+        int nameColumnIndex = cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME);
+        int quantityColumnIndex = cursor.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY);
 
         // Read the item attributes from the Cursor for the current item
         String itemName = cursor.getString(nameColumnIndex);
