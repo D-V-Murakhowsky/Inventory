@@ -22,11 +22,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.inventory.data.ItemContract;
+import com.example.inventory.data.ModelsContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayInputStream;
-import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class ItemActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -160,14 +159,14 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
         // Since the editor shows all item attributes, define a projection that contains
         // all columns from the inventory table
         String[] projection = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME,
-                ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG1,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG2,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG3,
-                ItemContract.ItemEntry.COLUMN_ITEM_IMAGE};
+                ModelsContract.ItemEntry._ID,
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME,
+                ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                ModelsContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG1,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG2,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG3,
+                ModelsContract.ItemEntry.COLUMN_ITEM_IMAGE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -187,13 +186,13 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
 
         if (data.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
-            int quantityColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-            int descriptionColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
-            int tag1ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG1);
-            int tag2ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG2);
-            int tag3ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG3);
-            int imageColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_IMAGE);
+            int nameColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
+            int quantityColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+            int descriptionColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
+            int tag1ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG1);
+            int tag2ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG2);
+            int tag3ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG3);
+            int imageColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);

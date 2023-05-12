@@ -15,7 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.example.inventory.data.ItemContract;
+import com.example.inventory.data.ModelsContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.core.app.NavUtils;
@@ -35,7 +35,6 @@ import android.widget.Toast;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 // TODO: 2018-07-09 if user clicks save twice two copies are saved
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -233,20 +232,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_TAG1, tag1String);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_TAG2, tag2String);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_TAG3, tag3String);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_IMAGE, photo);
-        values.put(ItemContract.ItemEntry.COLUMN_ITEM_URI, imageUri);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_TAG1, tag1String);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_TAG2, tag2String);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_TAG3, tag3String);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_IMAGE, photo);
+        values.put(ModelsContract.ItemEntry.COLUMN_ITEM_URI, imageUri);
 
         // if URI is null, then we are adding a new item
         if (mCurrentItemUri == null) {
             // This is a NEW item, so insert a new item into the provider,
             // returning the content URI for the new item.
-            Uri newUri = getContentResolver().insert(ItemContract.ItemEntry.CONTENT_URI, values);
+            Uri newUri = getContentResolver().insert(ModelsContract.ItemEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
@@ -341,15 +340,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Since the editor shows all item attributes, define a projection that contains
         // all columns from the inventory table
         String[] projection = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME,
-                ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG1,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG2,
-                ItemContract.ItemEntry.COLUMN_ITEM_TAG3,
-                ItemContract.ItemEntry.COLUMN_ITEM_IMAGE,
-                ItemContract.ItemEntry.COLUMN_ITEM_URI};
+                ModelsContract.ItemEntry._ID,
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME,
+                ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                ModelsContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG1,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG2,
+                ModelsContract.ItemEntry.COLUMN_ITEM_TAG3,
+                ModelsContract.ItemEntry.COLUMN_ITEM_IMAGE,
+                ModelsContract.ItemEntry.COLUMN_ITEM_URI};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -371,14 +370,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // (This should be the only row in the cursor)
         if (data.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
-            int quantityColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-            int descriptionColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
-            int tag1ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG1);
-            int tag2ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG2);
-            int tag3ColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_TAG3);
-            int imageColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_IMAGE);
-            int uriColumnIndex = data.getColumnIndex(ItemContract.ItemEntry.COLUMN_ITEM_URI);
+            int nameColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
+            int quantityColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+            int descriptionColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
+            int tag1ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG1);
+            int tag2ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG2);
+            int tag3ColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_TAG3);
+            int imageColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_IMAGE);
+            int uriColumnIndex = data.getColumnIndex(ModelsContract.ItemEntry.COLUMN_ITEM_URI);
 
 
             // Extract out the value from the Cursor for the given column index

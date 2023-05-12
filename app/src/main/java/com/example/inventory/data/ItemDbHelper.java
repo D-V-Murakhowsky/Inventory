@@ -8,7 +8,7 @@ import android.util.Log;
 
 
 import com.example.inventory.Search.SearchResult;
-import com.example.inventory.data.ItemContract.ItemEntry;
+import com.example.inventory.data.ModelsContract.ItemEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +82,9 @@ public class ItemDbHelper extends SQLiteOpenHelper{
         String sortOrder = "ROWID LIMIT 5";
 
         String[] projection = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME,
-                ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY};
+                ModelsContract.ItemEntry._ID,
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME,
+                ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY};
 
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection, null, null, null);
 
@@ -115,7 +115,7 @@ public class ItemDbHelper extends SQLiteOpenHelper{
     public List<String> getNames(){
 
         String[] projection = {
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME};
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME};
 
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection, null, null,null);
 
@@ -135,8 +135,8 @@ public class ItemDbHelper extends SQLiteOpenHelper{
     public List<SearchResult> getResultNames(String name){
 
         String[] projection = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME};
+                ModelsContract.ItemEntry._ID,
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME};
 
         String selection = ItemEntry.COLUMN_ITEM_NAME + " LIKE ?";
         String[] selectionArgs = new String[] {"&" + name + "%"};

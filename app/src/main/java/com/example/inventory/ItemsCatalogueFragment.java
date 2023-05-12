@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,7 +30,7 @@ import com.example.inventory.Search.CustomSuggestionsAdapter;
 import com.example.inventory.Search.RecyclerTouchListener;
 import com.example.inventory.Search.SearchAdapter;
 import com.example.inventory.Search.SearchResult;
-import com.example.inventory.data.ItemContract;
+import com.example.inventory.data.ModelsContract;
 import com.example.inventory.data.ItemDbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -223,7 +222,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 
                     Intent intent = new Intent( getActivity(), ItemActivity.class);
 
-                    Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, testResult3);
+                    Uri currentPetUri = ContentUris.withAppendedId(ModelsContract.ItemEntry.CONTENT_URI, testResult3);
                     // Set the URI on the data field of the intent
                     intent.setData(currentPetUri);
 
@@ -302,7 +301,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
                 // {@link PetEntry#CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.pets/pets/2"
                 // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, testResult3);
+                Uri currentPetUri = ContentUris.withAppendedId(ModelsContract.ItemEntry.CONTENT_URI, testResult3);
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
 
@@ -357,7 +356,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
                 // {@link PetEntry#CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.pets/pets/2"
                 // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, id);
+                Uri currentPetUri = ContentUris.withAppendedId(ModelsContract.ItemEntry.CONTENT_URI, id);
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
 
@@ -461,7 +460,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     }
 
     private void deleteAllItems() {
-        int rowsDeleted = requireActivity().getApplicationContext().getContentResolver().delete(ItemContract.ItemEntry.CONTENT_URI, null, null);
+        int rowsDeleted = requireActivity().getApplicationContext().getContentResolver().delete(ModelsContract.ItemEntry.CONTENT_URI, null, null);
         if (rowsDeleted >= 0) {
             Toast.makeText( requireActivity(), "All items deleted", Toast.LENGTH_SHORT).show();
         } else {
@@ -501,11 +500,11 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         // Sort order
         switch (choice) {
             case ASCENDING:
-                DEFAULT_SORT_ORDER = ItemContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE ASC";
+                DEFAULT_SORT_ORDER = ModelsContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE ASC";
                 sort_choice = 0;
                 break;
             case DESCENDING:
-                DEFAULT_SORT_ORDER = ItemContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE DESC";
+                DEFAULT_SORT_ORDER = ModelsContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE DESC";
                 sort_choice = 1;
                 break;
             case OLDEST_FIRST:
@@ -513,7 +512,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
                 sort_choice = 2;
                 break;
             case NEWEST_FIRST:
-                DEFAULT_SORT_ORDER = ItemContract.ItemEntry._ID + " DESC";
+                DEFAULT_SORT_ORDER = ModelsContract.ItemEntry._ID + " DESC";
                 sort_choice = 3;
                 break;
 
@@ -528,16 +527,16 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
-                ItemContract.ItemEntry._ID,
-                ItemContract.ItemEntry.COLUMN_ITEM_NAME,
-                ItemContract.ItemEntry.COLUMN_ITEM_QUANTITY};
+                ModelsContract.ItemEntry._ID,
+                ModelsContract.ItemEntry.COLUMN_ITEM_NAME,
+                ModelsContract.ItemEntry.COLUMN_ITEM_QUANTITY};
 
         Log.e("onCreateLoader", "DEFAULT_SORT_ORDER = " + DEFAULT_SORT_ORDER);
 
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(requireActivity(),   // Parent activity context
-                ItemContract.ItemEntry.CONTENT_URI,   // Provider content URI to query
+                ModelsContract.ItemEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments

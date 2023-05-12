@@ -34,10 +34,10 @@ public class ItemProvider extends ContentProvider{
         // when a match is found.
 
 
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_INVENTORY, ITEMS);
+        sUriMatcher.addURI(ModelsContract.CONTENT_AUTHORITY, ModelsContract.PATH_INVENTORY, ITEMS);
 
 
-        sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_INVENTORY + "/#", ITEM_ID);
+        sUriMatcher.addURI(ModelsContract.CONTENT_AUTHORITY, ModelsContract.PATH_INVENTORY + "/#", ITEM_ID);
     }
 
     /** Database helper object */
@@ -64,7 +64,7 @@ public class ItemProvider extends ContentProvider{
             case ITEMS:
 
                 //cursor containing all rows of the table
-                cursor = database.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(ModelsContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case ITEM_ID:
@@ -72,12 +72,12 @@ public class ItemProvider extends ContentProvider{
                 // For every "?" in the selection, we need to have an element in the selection
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
-                selection = ItemContract.ItemEntry._ID + "=?";
+                selection = ModelsContract.ItemEntry._ID + "=?";
                 //parseId follows convention where id is at the end of the uri
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 //cursor contains a single row specified by row ID
-                cursor = database.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(ModelsContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -99,9 +99,9 @@ public class ItemProvider extends ContentProvider{
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ITEMS:
-                return ItemContract.ItemEntry.CONTENT_LIST_TYPE;
+                return ModelsContract.ItemEntry.CONTENT_LIST_TYPE;
             case ITEM_ID:
-                return ItemContract.ItemEntry.CONTENT_ITEM_TYPE;
+                return ModelsContract.ItemEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
@@ -121,7 +121,7 @@ public class ItemProvider extends ContentProvider{
 
     private Uri insertItem(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
+        String name = values.getAsString(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Item requires a name");
         }
@@ -130,7 +130,7 @@ public class ItemProvider extends ContentProvider{
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
-        long id = database.insert(ItemContract.ItemEntry.TABLE_NAME, null, values);
+        long id = database.insert(ModelsContract.ItemEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e("ItemProvider", "Failed to insert row for " + uri);
@@ -156,13 +156,13 @@ public class ItemProvider extends ContentProvider{
         switch (match) {
             case ITEMS:
                 // Delete all rows that match the selection and selection args
-                rowsDeleted = database.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ModelsContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case ITEM_ID:
                 // Delete a single row given by the ID in the URI
-                selection = ItemContract.ItemEntry._ID + "=?";
+                selection = ModelsContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                rowsDeleted = database.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ModelsContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -185,7 +185,7 @@ public class ItemProvider extends ContentProvider{
             case ITEMS:
                 return updatePet(uri, values, selection, selectionArgs);
             case ITEM_ID:
-                selection = ItemContract.ItemEntry._ID + "=?";
+                selection = ModelsContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updatePet(uri, values, selection, selectionArgs);
             default:
@@ -201,8 +201,8 @@ public class ItemProvider extends ContentProvider{
         }
 
         // TODO: 2018-07-07 handle this exception (check pets database for more info)
-        if (values.containsKey(ItemContract.ItemEntry.COLUMN_ITEM_NAME)) {
-            String name = values.getAsString(ItemContract.ItemEntry.COLUMN_ITEM_NAME);
+        if (values.containsKey(ModelsContract.ItemEntry.COLUMN_ITEM_NAME)) {
+            String name = values.getAsString(ModelsContract.ItemEntry.COLUMN_ITEM_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Pet requires a name");
             }
@@ -212,7 +212,7 @@ public class ItemProvider extends ContentProvider{
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Perform the update on the database and get the number of rows affected
-        int rowsUpdated = database.update(ItemContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(ModelsContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
