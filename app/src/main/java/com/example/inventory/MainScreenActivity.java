@@ -20,7 +20,7 @@ public class MainScreenActivity extends AppCompatActivity{
     Map<Integer, String> tabNames = Map.ofEntries(
             Map.entry(0, "Товари"),
             Map.entry(1, "Полички"),
-            Map.entry(2, "Недостача")
+            Map.entry(2, "Нестача")
     );
 
 

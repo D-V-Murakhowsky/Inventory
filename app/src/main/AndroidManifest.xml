@@ -21,10 +21,20 @@
             android:name="com.example.inventory.MainScreenActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.example.inventory.EditorActivity"
+            android:name="com.example.inventory.ItemEditActivity"
             android:parentActivityName="com.example.inventory.MainScreenActivity" />
         <activity
-            android:name="com.example.inventory.ItemActivity"
+            android:name="com.example.inventory.ItemViewActivity"
+            android:parentActivityName="com.example.inventory.MainScreenActivity"
+            android:theme="@style/noTitle" />
+        <activity
+            android:name="com.example.inventory.ShelfEditActivity"
+            android:parentActivityName="com.example.inventory.MainScreenActivity" />
+        <activity
+            android:name="com.example.inventory.SelectShelfFromList"
+            android:parentActivityName="com.example.inventory.MainScreenActivity" />
+        <activity
+            android:name="com.example.inventory.ShelfViewActivity"
             android:parentActivityName="com.example.inventory.MainScreenActivity"
             android:theme="@style/noTitle" />
 

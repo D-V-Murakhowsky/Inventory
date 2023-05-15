@@ -17,7 +17,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case (0):
                 return new ItemsCatalogueFragment();
             case (1):
-                return CardFragment.newInstance(1);
+                return new ShelvesCatalogueFragment();
             case (2):
                 return CardFragment.newInstance(2);
             default:

@@ -32,7 +32,7 @@ public class DbContract {
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
     public static final String PATH_INVENTORY = "inventory";
-    public static final String PATH_SHELVES = "shelvers";
+    public static final String PATH_SHELVES = "shelves";
 
 
     /**
@@ -75,6 +75,18 @@ public class DbContract {
          * Type: TEXT (Integer)
          */
         public final static String COLUMN_ITEM_QUANTITY = "quantity";
+
+        /**
+         * The shelf on which the item is placed.
+         * Type: TEXT (Integer)
+         */
+        public final static String COLUMN_ITEM_SHELF_ID = "shelf_id";
+
+        /**
+         * The shelf on which the item is placed.
+         * Type: TEXT (Integer)
+         */
+        public final static String COLUMN_ITEM_SHELF_NAME = "shelf_name";
 
         /**
          * Description of the product

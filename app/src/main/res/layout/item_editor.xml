@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.inventory.EditorActivity">
+    tools:context="com.example.inventory.ItemEditActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,6 +95,28 @@
 
 
                         </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Description category -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="32dp">
+
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="49dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/shelf_chooser" />
+
+                        <Spinner
+                            android:id="@+id/shelf_chooser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:dropDownWidth="192dp"
+                            android:layout_weight="1" />
 
                     </LinearLayout>
 

@@ -4,18 +4,21 @@
     <string name="empty_view_subtitle_text">Почніть добавляти в нього щось</string>
     <string name="action_delete_entry">Видалити</string>
     <string name="category_overview">Основне</string>
+    <string name="shelf_name_tag">Назва полички</string>
     <string name="hint_item_name">Назва</string>
     <string name="hint_item_quantity">Кількість</string>
     <string name="action_save">Записати</string>
     <string name="category_description">Опис</string>
     <string name="hint_item_description">Введіть опис продукту</string>
+    <string name="hint_shelf_description">Введіть опис полички</string>
+    <string name="shelf_chooser">Поличка</string>
     <string name="dollarSign">$</string>
     <string name="hint_item_tag1">Тег 1</string>
     <string name="hint_item_tag2">Тег 2</string>
     <string name="hint_item_tag3">Тег 3</string>
     <string name="category_tag">Теги</string>
-    <string name="cardview_price_label">Price: $</string>
-    <string name="cardview_quantity_label">In stock:&#160;</string>
+    <string name="cardview_shelf_label">Поличка:</string>
+    <string name="cardview_quantity_label">Доступно:&#160;</string>
     <string name="editor_insert_item_successful">Item saved successfully</string>
     <string name="editor_insert_item_failed">An error occurred: Item could not be saved</string>
     <string name="action_delete_current_entry">Delete item</string>
@@ -41,4 +44,5 @@
     <string name="tag1">Тег 1</string>
     <string name="tag2">Тег 2</string>
     <string name="tag3">Тег 3</string>
+    <string name="shelf_name">"Поличка"</string>
 </resources>

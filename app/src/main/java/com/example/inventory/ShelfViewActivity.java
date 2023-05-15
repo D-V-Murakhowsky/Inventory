@@ -28,7 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
-public class ItemActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ShelfViewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * Content URI for the existing item
@@ -38,7 +38,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * Identifier for the item data loader
      */
-    private static final int EXISTING_ITEM_LOADER = 0;
+    private static final int EXISTING_SHELF_LOADER = 0;
 
     /**
      * Custom toolbar
@@ -48,29 +48,19 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * References to TextViews
      */
-
-    TextView quantityView;
-    TextView priceView;
     TextView descriptionView;
-    TextView tag1View;
-    TextView tag2View;
-    TextView tag3View;
     ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item);
+        setContentView(R.layout.shelf_view);
 
         Intent intent = getIntent();
         mCurrentItemUri = intent.getData();
 
         // find references to TextViews
-        quantityView = (TextView) findViewById(R.id.item_quantity_field);
         descriptionView = (TextView) findViewById(R.id.item_description_field);
-        tag1View = (TextView) findViewById(R.id.item_tag1_field);
-        tag2View = (TextView) findViewById(R.id.item_tag2_field);
-        tag3View = (TextView) findViewById(R.id.item_tag3_field);
         imageView = (ImageView) findViewById(R.id.item_image_field);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.item_fab);
@@ -79,7 +69,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ItemActivity.this, EditorActivity.class);
+                Intent intent = new Intent(ShelfViewActivity.this, ShelfEditActivity.class);
                 intent.setData(mCurrentItemUri);
                 startActivity(intent);
             }
@@ -98,7 +88,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
 
         getSupportActionBar().setTitle("");
 
-        getLoaderManager().initLoader(EXISTING_ITEM_LOADER, null, this);
+        getLoaderManager().initLoader(EXISTING_SHELF_LOADER, null, this);
 
     }
 
@@ -140,7 +130,7 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
                 showDeleteConfirmationDialog();
                 return true;
             case R.id.action_edit_current_entry:
-                Intent intent = new Intent(ItemActivity.this, EditorActivity.class);
+                Intent intent = new Intent(ShelfViewActivity.this, ItemEditActivity.class);
                 intent.setData(mCurrentItemUri);
                 startActivity(intent);
                 return true;
@@ -159,14 +149,10 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
         // Since the editor shows all item attributes, define a projection that contains
         // all columns from the inventory table
         String[] projection = {
-                DbContract.ItemEntry._ID,
-                DbContract.ItemEntry.COLUMN_ITEM_NAME,
-                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG1,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG2,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG3,
-                DbContract.ItemEntry.COLUMN_ITEM_IMAGE};
+                DbContract.ShelfEntry._ID,
+                DbContract.ShelfEntry.COLUMN_SHELF_NAME,
+                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION,
+                DbContract.ShelfEntry.COLUMN_SHELF_IMAGE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -186,21 +172,13 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
 
         if (data.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME);
-            int quantityColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-            int descriptionColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
-            int tag1ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG1);
-            int tag2ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG2);
-            int tag3ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG3);
-            int imageColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_IMAGE);
+            int nameColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
+            int descriptionColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION);
+            int imageColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
-            int quantity = data.getInt(quantityColumnIndex);
             String description = data.getString(descriptionColumnIndex);
-            String tag1 = data.getString(tag1ColumnIndex);
-            String tag2 = data.getString(tag2ColumnIndex);
-            String tag3 = data.getString(tag3ColumnIndex);
             byte[] photo = data.getBlob(imageColumnIndex);
 
             ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
@@ -210,55 +188,8 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
             getSupportActionBar().setTitle(name);
 
             // Update the views on the screen with the values from the database
-            quantityView.setText(Integer.toString(quantity));
             descriptionView.setText(description);
             imageView.setImageBitmap(theImage);
-
-            // Initially no tags
-            tag1View.setVisibility(View.GONE);
-            tag2View.setVisibility(View.GONE);
-            tag3View.setVisibility(View.GONE);
-
-            // Determine which tags to fill
-            if (!tag1.isEmpty()) {
-                tag1View.setText(tag1);
-                tag1View.setVisibility(View.VISIBLE);
-
-                if (!tag2.isEmpty()) {
-                    tag2View.setText(tag2);
-                    tag2View.setVisibility(View.VISIBLE);
-
-                    if (!tag3.isEmpty()) {
-                        tag3View.setText(tag3);
-                        tag3View.setVisibility(View.VISIBLE);
-                        return;
-                    }
-                    else
-                        return;
-                } else if (!tag3.isEmpty()) {
-                    tag2View.setText(tag3);
-                    tag2View.setVisibility(View.VISIBLE);
-                    return;
-                }
-            } else if (!tag2.isEmpty()) {
-                tag1View.setText(tag2);
-                tag1View.setVisibility(View.VISIBLE);
-
-                if(!tag3.isEmpty()){
-                    tag2View.setText(tag3);
-                    tag2View.setVisibility(View.VISIBLE);
-                    return;
-                }
-                else
-                    return;
-            } else if (!tag3.isEmpty()) {
-                tag1View.setText(tag3);
-                tag1View.setVisibility(View.VISIBLE);
-                return;
-            }
-
-
-
         }
     }
 
@@ -272,19 +203,14 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
         Bitmap tempItemBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
 
         // Update the views on the screen with the values from the database
-        quantityView.setText("");
-        priceView.setText("");
         descriptionView.setText("");
-        tag1View.setText("");
-        tag2View.setText("");
-        tag3View.setText("");
         imageView.setImageBitmap(tempItemBitmap);
 
     }
 
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {

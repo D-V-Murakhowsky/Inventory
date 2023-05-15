@@ -220,7 +220,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 //                    Toast.makeText(getBaseContext(), "Search Success!",
 //                            Toast.LENGTH_LONG).show();
 
-                    Intent intent = new Intent( getActivity(), ItemActivity.class);
+                    Intent intent = new Intent( getActivity(), ItemViewActivity.class);
 
                     Uri currentPetUri = ContentUris.withAppendedId(DbContract.ItemEntry.CONTENT_URI, testResult3);
                     // Set the URI on the data field of the intent
@@ -294,7 +294,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 //                Log.e("catalog", "testResult3 = " + String.valueOf(testResult3));
 
 
-                Intent intent = new Intent( getActivity(), ItemActivity.class);
+                Intent intent = new Intent( getActivity(), ItemViewActivity.class);
 
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
@@ -339,7 +339,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( getActivity(), EditorActivity.class);
+                Intent intent = new Intent( getActivity(), ItemEditActivity.class);
                 startActivity(intent);
             }
         });
@@ -349,7 +349,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Create new intent to go to {@link EditorActivity}
-                Intent intent = new Intent( getActivity(), ItemActivity.class);
+                Intent intent = new Intent( getActivity(), ItemViewActivity.class);
 
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
@@ -529,7 +529,8 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         String[] projection = {
                 DbContract.ItemEntry._ID,
                 DbContract.ItemEntry.COLUMN_ITEM_NAME,
-                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY};
+                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                DbContract.ItemEntry.COLUMN_ITEM_SHELF_NAME};
 
         Log.e("onCreateLoader", "DEFAULT_SORT_ORDER = " + DEFAULT_SORT_ORDER);
 

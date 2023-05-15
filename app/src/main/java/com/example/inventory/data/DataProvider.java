@@ -74,8 +74,8 @@ public class DataProvider extends ContentProvider{
         switch (match) {
             case ITEMS:
                 //cursor containing all rows of the table
-                cursor = database.query(DbContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                cursor = database.query(DbContract.ItemEntry.TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
                 break;
 
             case ITEM_ID:

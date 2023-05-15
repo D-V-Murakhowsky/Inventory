@@ -9,9 +9,12 @@ import android.util.Log;
 
 import com.example.inventory.Search.SearchResult;
 import com.example.inventory.data.DbContract.ItemEntry;
+import com.example.inventory.data.DbContract.ShelfEntry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DbHelper extends SQLiteOpenHelper{
 
@@ -40,16 +43,17 @@ public class DbHelper extends SQLiteOpenHelper{
         this.context = context;
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.e("ItemDbHelper","inside onCreate");
+        Log.e("DbHelper","inside onCreate");
         // Create a String that contains the SQL statement to create the pets table
         String SQL_CREATE_ITEMS_TABLE = "CREATE TABLE " + ItemEntry.TABLE_NAME + " ("
                 + ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_QUANTITY + " INTEGER DEFAULT 0, "
+                + ItemEntry.COLUMN_ITEM_SHELF_ID + " INTEGER NOT NULL, "
+                + ItemEntry.COLUMN_ITEM_SHELF_NAME + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_DESCRIPTION + " TEXT, "
                 + ItemEntry.COLUMN_ITEM_TAG1 + " TEXT, "
                 + ItemEntry.COLUMN_ITEM_TAG2 + " TEXT, "
@@ -57,17 +61,17 @@ public class DbHelper extends SQLiteOpenHelper{
                 + ItemEntry.COLUMN_ITEM_IMAGE + " BLOB, "
                 + ItemEntry.COLUMN_ITEM_URI + " TEXT); ";
 
+        String SQL_CREATE_SHELVES_TABLE = "CREATE TABLE " + DbContract.ShelfEntry.TABLE_NAME + " ("
+                + ShelfEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ShelfEntry.COLUMN_SHELF_NAME + " TEXT NOT NULL, "
+                + ShelfEntry.COLUMN_SHELF_DESCRIPTION + " TEXT, "
+                + ShelfEntry.COLUMN_SHELF_IMAGE + " BLOB, "
+                + ShelfEntry.COLUMN_SHELF_URI + " TEXT); ";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);
-        /*
-        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + PetEntry.TABLE_NAME + " ("
-                + PetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PetEntry.COLUMN_PET_NAME + " TEXT NOT NULL, "
-                + PetEntry.COLUMN_PET_BREED + " TEXT, "
-                + PetEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
-                + PetEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
-         */
+        db.execSQL(SQL_CREATE_SHELVES_TABLE);
+
     }
 
     @Override
@@ -125,6 +129,27 @@ public class DbHelper extends SQLiteOpenHelper{
                 int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
                 if (nameColumnIndex > -1) {
                     searchResults.add(cursor.getString(nameColumnIndex));
+                }
+            }while(cursor.moveToNext());
+        }
+
+        return searchResults;
+    }
+
+    public HashMap<String, String> getShelvesNames(){
+        String [] projection = {ShelfEntry._ID, ShelfEntry.COLUMN_SHELF_NAME};
+
+        Cursor cursor = context.getContentResolver().query(ShelfEntry.CONTENT_URI, projection,
+                null, null,null);
+
+        HashMap<String, String> searchResults = new HashMap<>();
+        if(cursor.moveToFirst()){
+            do{
+                int idColumnIndex = cursor.getColumnIndex( ShelfEntry._ID );
+                int nameColumnIndex = cursor.getColumnIndex( ShelfEntry.COLUMN_SHELF_NAME );
+                if ((nameColumnIndex > -1) && (idColumnIndex > -1)){
+                    searchResults.put(cursor.getString(idColumnIndex),
+                            cursor.getString(nameColumnIndex));
                 }
             }while(cursor.moveToNext());
         }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.inventory.ItemEditActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Contains the text fields -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="914dp"
+            android:layout_weight="0.6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_margin">
+
+                <!-- Contains item image -->
+                <ImageView
+                    android:id="@+id/edit_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:maxWidth="300dp"
+                    android:maxHeight="300dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/shelf_prompt" />
+
+                <!-- Contains all the item info -->
+                <LinearLayout
+                    android:layout_width="383dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="32dp"
+                    android:paddingBottom="32dp">
+
+                    <!-- Overview category -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <!-- Label -->
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="@string/shelf_name_tag" />
+
+                        <!-- Input fields -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:paddingLeft="4dp">
+
+                            <!-- Name field -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_name"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/hint_item_name"
+                                    android:inputType="textCapWords" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Description category -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="32dp">
+
+                        <!-- Label -->
+
+                        <!-- Description -->
+
+                        <TextView
+                            style="@style/CategoryStyle"
+                            android:layout_height="70dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/category_description" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:paddingLeft="4dp">
+
+                            <!-- Description field -->
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edit_item_description"
+                                style="@style/EditorFieldStyle"
+                                android:layout_height="70dp"
+                                android:hint="@string/hint_shelf_description"
+                                android:inputType="textCapWords" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:tint="@color/white"
+        android:onClick="insertImage"
+        app:srcCompat="@drawable/camera_icon"
+        android:maxWidth="48dp"
+        android:maxHeight="48dp"
+        app:layout_anchor="@id/edit_item_image"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,16 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.provider.MediaStore;
-
-import com.example.inventory.data.DbContract;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.core.app.NavUtils;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,17 +24,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
+import com.example.inventory.data.DbContract;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 // TODO: 2018-07-09 if user clicks save twice two copies are saved
-public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ShelfEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
      * Identifier for the item data loader
      */
-    private static final int EXISTING_ITEM_LOADER = 0;
+    private static final int EXISTING_SHELF_LOADER = 0;
 
     /**
      * Content URI for the existing item (null if it's a new item)
@@ -53,31 +52,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * EditText field to enter the item's name
      */
     private EditText mNameEditText;
-
-    /**
-     * EditText field to enter the item's quantity
-     */
-    private EditText mQuantityEditText;
-
-    /**
-     * EditText field to enter the item's price
-     */
-    private EditText mPriceEditText;
-
-    /**
-     * EditText field for tag 1
-     */
-    private EditText mTag1EditText;
-
-    /**
-     * EditText field for tag 2
-     */
-    private EditText mTag2EditText;
-
-    /**
-     * EditText field for tag 3
-     */
-    private EditText mTag3EditText;
 
     /**
      * EditText field to enter the item's description
@@ -119,7 +93,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      */
     private Uri selectedImage = null;
 
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mItemHasChanged = true;
@@ -130,7 +104,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.shelf_editor);
 
 
         // Examine the intent that was used to launch this activity,
@@ -149,25 +123,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             // Initialize a loader to read the item data from the database
             // and display the current values in the editor
-            getLoaderManager().initLoader(EXISTING_ITEM_LOADER, null, this);
+            getLoaderManager().initLoader(EXISTING_SHELF_LOADER, null, this);
         }
 
 
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
-        mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
         mItemImageView = (ImageView) findViewById(R.id.edit_item_image);
-        mTag1EditText = (EditText) findViewById(R.id.edit_item_tag1);
-        mTag2EditText = (EditText) findViewById(R.id.edit_item_tag2);
-        mTag3EditText = (EditText) findViewById(R.id.edit_item_tag3);
         fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         mNameEditText.setOnTouchListener(mTouchListener);
-        mQuantityEditText.setOnTouchListener(mTouchListener);
         mDescriptionEditText.setOnTouchListener(mTouchListener);
-        mTag1EditText.setOnTouchListener(mTouchListener);
-        mTag2EditText.setOnTouchListener(mTouchListener);
-        mTag3EditText.setOnTouchListener(mTouchListener);
         fab.setOnTouchListener(mTouchListener);
 
         mItemBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
@@ -175,7 +141,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog d = new Dialog(EditorActivity.this);
+                Dialog d = new Dialog(ShelfEditActivity.this);
                 d.setContentView(R.layout.custom_dialog);
                 ImageView image_full = (ImageView) d.findViewById(R.id.image_full);
                 if(mItemBitmap != null)
@@ -190,38 +156,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-        String quantityString = mQuantityEditText.getText().toString().trim();
-        String priceString = mPriceEditText.getText().toString().trim();
         String descriptionString = mDescriptionEditText.getText().toString().trim();
-        String tag1String = mTag1EditText.getText().toString().trim();
-        String tag2String = mTag2EditText.getText().toString().trim();
-        String tag3String = mTag3EditText.getText().toString().trim();
         String imageUri;
         if(selectedImage == null)
             imageUri = "null";
         else
             imageUri = selectedImage.toString();     // may cause error since default is null
-
-        int quantityInteger = 0;
-        if (!TextUtils.isEmpty(quantityString)) {
-            quantityInteger = Integer.parseInt(quantityString);
-        }
-
-        double priceDouble = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            priceDouble = Double.parseDouble(priceString);
-        }
-
-        // TODO: 2018-07-08 check for blank inputs in edit mode
-        //        // Check if this is supposed to be a new pet
-        //        // and check if all the fields in the editor are blank
-        //        if (mCurrentItemUri == null &&
-        //                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) &&
-        //                TextUtils.isEmpty(weightString) && mGender == PetEntry.GENDER_UNKNOWN) {
-        //            // Since no fields were modified, we can return early without creating a new pet.
-        //            // No need to create ContentValues and no need to do any ContentProvider operations.
-        //            return;
-        //        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         mItemBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -232,20 +172,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_TAG1, tag1String);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_TAG2, tag2String);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_TAG3, tag3String);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_IMAGE, photo);
-        values.put(DbContract.ItemEntry.COLUMN_ITEM_URI, imageUri);
+        values.put(DbContract.ShelfEntry.COLUMN_SHELF_NAME, nameString);
+        values.put(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION, descriptionString);
+        values.put(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE, photo);
+        values.put(DbContract.ShelfEntry.COLUMN_SHELF_URI, imageUri);
 
         // if URI is null, then we are adding a new item
         if (mCurrentItemUri == null) {
             // This is a NEW item, so insert a new item into the provider,
             // returning the content URI for the new item.
-            Uri newUri = getContentResolver().insert(DbContract.ItemEntry.CONTENT_URI, values);
+            Uri newUri = getContentResolver().insert(DbContract.ShelfEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
@@ -297,7 +233,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         Toast.LENGTH_SHORT).show();
             }
         }
-        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+        NavUtils.navigateUpFromSameTask(ShelfEditActivity.this);
     }
 
     @Override
@@ -340,15 +276,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Since the editor shows all item attributes, define a projection that contains
         // all columns from the inventory table
         String[] projection = {
-                DbContract.ItemEntry._ID,
-                DbContract.ItemEntry.COLUMN_ITEM_NAME,
-                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG1,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG2,
-                DbContract.ItemEntry.COLUMN_ITEM_TAG3,
-                DbContract.ItemEntry.COLUMN_ITEM_IMAGE,
-                DbContract.ItemEntry.COLUMN_ITEM_URI};
+                DbContract.ShelfEntry._ID,
+                DbContract.ShelfEntry.COLUMN_SHELF_NAME,
+                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION,
+                DbContract.ShelfEntry.COLUMN_SHELF_IMAGE,
+                DbContract.ShelfEntry.COLUMN_SHELF_URI};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -370,23 +302,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // (This should be the only row in the cursor)
         if (data.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME);
-            int quantityColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY);
-            int descriptionColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
-            int tag1ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG1);
-            int tag2ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG2);
-            int tag3ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG3);
-            int imageColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_IMAGE);
-            int uriColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_URI);
+            int nameColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
+            int descriptionColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION);
+            int imageColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE);
+            int uriColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_URI);
 
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
-            int quantity = data.getInt(quantityColumnIndex);
             String description = data.getString(descriptionColumnIndex);
-            String tag1 = data.getString(tag1ColumnIndex);
-            String tag2 = data.getString(tag2ColumnIndex);
-            String tag3 = data.getString(tag3ColumnIndex);
             byte[] photo = data.getBlob(imageColumnIndex);
             String imageURI = data.getString(uriColumnIndex);
 
@@ -396,11 +320,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mQuantityEditText.setText(Integer.toString(quantity));
             mDescriptionEditText.setText(description);
-            mTag1EditText.setText(tag1);
-            mTag2EditText.setText(tag2);
-            mTag3EditText.setText(tag3);
             mItemImageView.setImageBitmap(theImage);
             mItemBitmap = theImage;
             if(imageURI == "null")
@@ -417,12 +337,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Bitmap tempItemBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
 
         mNameEditText.setText("");
-        mQuantityEditText.setText("");
-        mPriceEditText.setText("");
         mDescriptionEditText.setText("");
-        mTag1EditText.setText("");
-        mTag2EditText.setText("");
-        mTag3EditText.setText("");
         mItemImageView.setImageBitmap(tempItemBitmap);
         selectedImage = null;
     }
@@ -454,7 +369,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private void showUnsavedChangesDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.return_dialog_msg);
         builder.setPositiveButton(R.string.discard, new DialogInterface.OnClickListener() {
