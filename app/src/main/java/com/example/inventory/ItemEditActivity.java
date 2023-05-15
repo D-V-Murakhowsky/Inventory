@@ -38,7 +38,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-// TODO: 2018-07-09 if user clicks save twice two copies are saved
+
 public class ItemEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
@@ -128,7 +128,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
      */
     private Uri selectedImage = null;
 
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mItemHasChanged = true;
@@ -150,17 +150,16 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
         // If the intent DOES NOT contain a content URI, then we know that we are
         // creating a new item.
         if (mCurrentItemUri == null) {
-            // This is a new pet, so change the app bar to say "Add a Pet"
+            // This is a new item, so change the app bar to say "Add an item"
             setTitle(getString(R.string.editor_activity_title_new_item));
         } else {
-            // Otherwise this is an existing pet, so change app bar to say "Edit Pet"
+            // Otherwise this is an existing item, so change app bar to say "Edit item"
             setTitle(getString(R.string.editor_activity_title_edit_item));
 
             // Initialize a loader to read the item data from the database
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_ITEM_LOADER, null, this);
         }
-
 
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
@@ -233,17 +232,6 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
             quantityInteger = Integer.parseInt(quantityString);
         }
 
-        // TODO: 2018-07-08 check for blank inputs in edit mode
-        //        // Check if this is supposed to be a new pet
-        //        // and check if all the fields in the editor are blank
-        //        if (mCurrentItemUri == null &&
-        //                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) &&
-        //                TextUtils.isEmpty(weightString) && mGender == PetEntry.GENDER_UNKNOWN) {
-        //            // Since no fields were modified, we can return early without creating a new pet.
-        //            // No need to create ContentValues and no need to do any ContentProvider operations.
-        //            return;
-        //        }
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         mItemBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] photo = baos.toByteArray();
@@ -251,7 +239,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
         Log.e("save method","converted to byte array");
 
         // Create a ContentValues object where column names are the keys,
-        // and pet attributes from the editor are the values.
+        // and item attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(DbContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
@@ -416,10 +404,9 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
             ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
             Bitmap theImage = BitmapFactory.decodeStream(imageStream);
 
-
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mQuantityEditText.setText(Integer.toString(quantity));
+            mQuantityEditText.setText(String.format(":%d", quantity));
             mDescriptionEditText.setText(description);
             mTag1EditText.setText(tag1);
             mTag2EditText.setText(tag2);
