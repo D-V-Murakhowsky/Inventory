@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,10 +37,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 2018-07-08 add "tags" fields to the database
 public class ItemsCatalogueFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
@@ -144,6 +145,20 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         // Create the search bar
         materialSearchBar = (MaterialSearchBar) view.findViewById(R.id.search_bar1);
         materialSearchBar.setCardViewElevation(0);
+        materialSearchBar.setPlaceHolder("Пошук");
+        materialSearchBar.setHint("Введіть назву для пошуку");
+
+//        try {
+//            Field searchEdit = materialSearchBar.getClass().getDeclaredField("searchEdit");
+//            searchEdit.setAccessible(true);
+//            final EditText editText = (EditText) searchEdit.get(materialSearchBar);
+//            assert editText != null;
+//            editText.setText("Пошук");
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
 //      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
 

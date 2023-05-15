@@ -21,21 +21,21 @@
     <string name="cardview_quantity_label">Доступно:&#160;</string>
     <string name="editor_insert_item_successful">Item saved successfully</string>
     <string name="editor_insert_item_failed">An error occurred: Item could not be saved</string>
-    <string name="action_delete_current_entry">Delete item</string>
-    <string name="editor_delete_item_successful">Item deleted successfully</string>
+    <string name="action_delete_current_entry">Видалити</string>
+    <string name="editor_delete_item_successful">Видалено</string>
     <string name="editor_delete_item_failed">An error occurred: Item could not be deleted</string>
     <string name="editor_activity_title_new_item">Додавання</string>
     <string name="editor_activity_title_edit_item">Редагування</string>
     <string name="editor_update_item_successful">Item updated successfully</string>
     <string name="editor_update_item_failed">An error occurred: Item could not be updated</string>
-    <string name="delete">Delete</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete_dialog_msg">Are you sure you want to delete this item?</string>
-    <string name="delete_all_dialog_msg">Are you sure you want to delete all items?</string>
+    <string name="delete">Видалити</string>
+    <string name="cancel">Скасувати</string>
+    <string name="delete_dialog_msg">Видалити елемент?</string>
+    <string name="delete_all_dialog_msg">Видалити всі елементи?</string>
     <string name="return_dialog_msg">You have unsaved changes. Are you sure you want to exit?</string>
-    <string name="discard">Discard changes</string>
-    <string name="edit">Keep editing</string>
-    <string name="sort_dialog_msg">Sort By</string>
+    <string name="discard">Скасувати зміни</string>
+    <string name="edit">Продовжити редагування</string>
+    <string name="sort_dialog_msg">Відсортувати за</string>
     <string name="todo">TODO</string>
     <string name="hello_blank_fragment">Test value</string>
     <string name="in_stock">Кількість</string>
@@ -45,4 +45,5 @@
     <string name="tag2">Тег 2</string>
     <string name="tag3">Тег 3</string>
     <string name="shelf_name">"Поличка"</string>
+    <string name="edit_item">Редагування</string>
 </resources>

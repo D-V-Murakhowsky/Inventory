@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_edit_current_entry"
-        android:title="Edit item"
+        android:title="@string/edit_item"
         app:showAsAction="never" />
 
     <item
