@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Інвентаризація</string>
+    <string name="app_name">Комора</string>
     <string name="empty_view_title_text">Наразі перелік пустий</string>
     <string name="empty_view_subtitle_text">Почніть добавляти в нього щось</string>
     <string name="action_delete_entry">Видалити</string>
