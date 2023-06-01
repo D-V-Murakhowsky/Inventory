@@ -35,7 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-// TODO: 2018-07-09 if user clicks save twice two copies are saved
 public class ShelfEditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
@@ -59,39 +58,9 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
     private EditText mDescriptionEditText;
 
     /**
-     * ImageView to show product image
-     */
-    private ImageView mItemImageView;
-
-    /**
-     * Bitmap of item's image
-     */
-    public Bitmap mItemBitmap;
-
-    /**
-     * Camera FAB
-     */
-    public FloatingActionButton fab;
-
-    /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
      */
     private boolean mItemHasChanged = false;
-
-    /**
-     * ID for accessing image from gallery
-     */
-    private static final int GALLERY_REQUEST = 1;
-
-    /**
-     * Maximum size for an image file that can be stored in the database
-     */
-    private static final int FIVE_MB = 5000000;
-
-    /**
-     * URI of selected image
-     */
-    private Uri selectedImage = null;
 
     private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -105,7 +74,6 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shelf_editor);
-
 
         // Examine the intent that was used to launch this activity,
         // in order to figure out if we're creating a new item or editing an existing one.
@@ -129,27 +97,9 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
 
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
-        mItemImageView = (ImageView) findViewById(R.id.edit_item_image);
-        fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         mNameEditText.setOnTouchListener(mTouchListener);
         mDescriptionEditText.setOnTouchListener(mTouchListener);
-        fab.setOnTouchListener(mTouchListener);
-
-        mItemBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
-
-        mItemImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog d = new Dialog(ShelfEditActivity.this);
-                d.setContentView(R.layout.custom_dialog);
-                ImageView image_full = (ImageView) d.findViewById(R.id.image_full);
-                if(mItemBitmap != null)
-                    image_full.setImageBitmap(mItemBitmap);
-                d.show();
-            }
-        });
-
     }
 
     private void saveItem() {
@@ -157,15 +107,6 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String descriptionString = mDescriptionEditText.getText().toString().trim();
-        String imageUri;
-        if(selectedImage == null)
-            imageUri = "null";
-        else
-            imageUri = selectedImage.toString();     // may cause error since default is null
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        mItemBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] photo = baos.toByteArray();
 
         Log.e("save method","converted to byte array");
 
@@ -174,8 +115,6 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
         ContentValues values = new ContentValues();
         values.put(DbContract.ShelfEntry.COLUMN_SHELF_NAME, nameString);
         values.put(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION, descriptionString);
-        values.put(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE, photo);
-        values.put(DbContract.ShelfEntry.COLUMN_SHELF_URI, imageUri);
 
         // if URI is null, then we are adding a new item
         if (mCurrentItemUri == null) {
@@ -278,9 +217,7 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
         String[] projection = {
                 DbContract.ShelfEntry._ID,
                 DbContract.ShelfEntry.COLUMN_SHELF_NAME,
-                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION,
-                DbContract.ShelfEntry.COLUMN_SHELF_IMAGE,
-                DbContract.ShelfEntry.COLUMN_SHELF_URI};
+                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -304,30 +241,14 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
             int descriptionColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION);
-            int imageColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE);
-            int uriColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_URI);
-
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
             String description = data.getString(descriptionColumnIndex);
-            byte[] photo = data.getBlob(imageColumnIndex);
-            String imageURI = data.getString(uriColumnIndex);
-
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
-            Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mDescriptionEditText.setText(description);
-            mItemImageView.setImageBitmap(theImage);
-            mItemBitmap = theImage;
-            if(imageURI == "null")
-                selectedImage = null;
-            else
-                selectedImage = Uri.parse(imageURI);
-
         }
     }
 
@@ -338,8 +259,6 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
 
         mNameEditText.setText("");
         mDescriptionEditText.setText("");
-        mItemImageView.setImageBitmap(tempItemBitmap);
-        selectedImage = null;
     }
 
     private void showDeleteConfirmationDialog() {
@@ -390,43 +309,6 @@ public class ShelfEditActivity extends AppCompatActivity implements LoaderManage
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    public void insertImage(View view){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK)
-            switch (requestCode){
-                case GALLERY_REQUEST:
-                    selectedImage = data.getData();
-                    Log.e("editor activity", selectedImage.toString());
-                    try {
-                        mItemBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                        int i = mItemBitmap.getAllocationByteCount();
-                        // if less than 5MB set the image
-                        if(i < FIVE_MB) {
-                            mItemImageView.setImageBitmap(mItemBitmap);
-                            Log.e("Editor Activity", "successfully converted image");
-                        }
-                        // otherwise keep the default image
-                        else{
-                            mItemBitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
-                            selectedImage = null;
-                            Log.e("Editor Activity", "image too large");
-                            Toast.makeText(this,"Image too large", Toast.LENGTH_SHORT).show();
-                        }
-                        Log.e("Editor Activity", String.valueOf(i));
-                    } catch (IOException e) {
-                        Log.e("onActivityResult", "Some exception " + e);
-                    }
-                    break;
-            }
     }
 
 }

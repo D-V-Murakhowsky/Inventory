@@ -132,8 +132,7 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
         String[] projection = {
                 DbContract.ShelfEntry._ID,
                 DbContract.ShelfEntry.COLUMN_SHELF_NAME,
-                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION,
-                DbContract.ShelfEntry.COLUMN_SHELF_IMAGE};
+                DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context

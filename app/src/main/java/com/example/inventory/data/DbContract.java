@@ -163,20 +163,5 @@ public class DbContract {
          * Type: TEXT (String)
          */
         public final static String COLUMN_SHELF_DESCRIPTION = "description";
-
-        /**
-         * Image for the item.
-         * Type: BLOB
-         */
-        public final static String COLUMN_SHELF_IMAGE = "qr_code";
-
-        /**
-         * URI for the image
-         * Type: TEXT
-         */
-        public final static String COLUMN_SHELF_URI = "imageuri";
-
     }
-
-
 }

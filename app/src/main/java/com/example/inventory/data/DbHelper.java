@@ -64,9 +64,7 @@ public class DbHelper extends SQLiteOpenHelper{
         String SQL_CREATE_SHELVES_TABLE = "CREATE TABLE " + DbContract.ShelfEntry.TABLE_NAME + " ("
                 + ShelfEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ShelfEntry.COLUMN_SHELF_NAME + " TEXT NOT NULL, "
-                + ShelfEntry.COLUMN_SHELF_DESCRIPTION + " TEXT, "
-                + ShelfEntry.COLUMN_SHELF_IMAGE + " BLOB, "
-                + ShelfEntry.COLUMN_SHELF_URI + " TEXT); ";
+                + ShelfEntry.COLUMN_SHELF_DESCRIPTION + " TEXT); ";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_ITEMS_TABLE);
