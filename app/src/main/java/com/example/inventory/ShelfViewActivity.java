@@ -18,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.inventory.data.DbContract;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,15 +43,11 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
     private static final int EXISTING_SHELF_LOADER = 0;
 
     /**
-     * Custom toolbar
-     */
-    private Toolbar toolbar;
-
-    /**
      * References to TextViews
      */
     TextView descriptionView;
-    ImageView imageView;
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,24 +59,7 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
 
         // find references to TextViews
         descriptionView = (TextView) findViewById(R.id.item_description_field);
-        imageView = (ImageView) findViewById(R.id.item_image_field);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.item_fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ShelfViewActivity.this, ShelfEditActivity.class);
-                intent.setData(mCurrentItemUri);
-                startActivity(intent);
-            }
-        });
-
-        /**
-         * Create custom toolbar for the collapsing toolbar menu
-         *
-         */
         // get ID of custom toolbar and set as the desired toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,7 +111,7 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
                 showDeleteConfirmationDialog();
                 return true;
             case R.id.action_edit_current_entry:
-                Intent intent = new Intent(ShelfViewActivity.this, ItemEditActivity.class);
+                Intent intent = new Intent(ShelfViewActivity.this,  ShelfEditActivity.class);
                 intent.setData(mCurrentItemUri);
                 startActivity(intent);
                 return true;
@@ -174,22 +155,23 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
             int descriptionColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_DESCRIPTION);
-            int imageColumnIndex = data.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
             String description = data.getString(descriptionColumnIndex);
-            byte[] photo = data.getBlob(imageColumnIndex);
-
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
-            Bitmap theImage = BitmapFactory.decodeStream(imageStream);
 
             // set the title of the toolbar
-            getSupportActionBar().setTitle(name);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(name);
 
             // Update the views on the screen with the values from the database
             descriptionView.setText(description);
-            imageView.setImageBitmap(theImage);
+
+            // set the title of the toolbar
+            ActionBar currentActionBar = getSupportActionBar();
+            assert currentActionBar != null;
+            currentActionBar.setTitle(name);
+            toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
+            currentActionBar.setDisplayShowTitleEnabled(true);
         }
     }
 
@@ -199,12 +181,8 @@ public class ShelfViewActivity extends AppCompatActivity implements LoaderManage
         // set the title of the toolbar
         getSupportActionBar().setTitle("");
 
-        // default bitmap
-        Bitmap tempItemBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image_prompt)).getBitmap();
-
         // Update the views on the screen with the values from the database
         descriptionView.setText("");
-        imageView.setImageBitmap(tempItemBitmap);
 
     }
 

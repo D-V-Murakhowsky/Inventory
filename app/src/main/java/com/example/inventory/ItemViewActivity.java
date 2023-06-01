@@ -216,7 +216,7 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
             ActionBar currentActionBar = getSupportActionBar();
             assert currentActionBar != null;
             currentActionBar.setTitle(name);
-            toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.green_300));
+            toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
             currentActionBar.setDisplayShowTitleEnabled(true);
 
             // Update the views on the screen with the values from the database
