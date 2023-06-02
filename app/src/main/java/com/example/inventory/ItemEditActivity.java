@@ -199,7 +199,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                shelfID = adapterView.getSelectedItemPosition();
+                shelfID = adapterView.getSelectedItemPosition() + 1;
                 shelfName = (String) adapterView.getSelectedItem();
             }
 

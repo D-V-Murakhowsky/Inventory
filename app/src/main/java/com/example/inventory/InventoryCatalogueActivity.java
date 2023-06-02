@@ -1,7 +1,9 @@
 package com.example.inventory;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,7 +40,7 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
     /**
      * Adapter for the ListView
      */
-    ItemCursorAdapter mCursorAdapter;
+    InventoryArrayAdapter mCursorAdapter;
 
     /**
      * Identifier for the item data loader
@@ -79,6 +81,10 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
      * Current Sort Choice
      */
     private static int sort_choice = 2;
+
+    private static final String shelfId = "1";
+
+    private String idShelf;
 
 
     RecyclerView recyclerView;
@@ -133,6 +139,9 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
         // Create a new instance of the database for access to the searchbar
         database = new DbHelper(this);
+
+        Intent intent = getIntent();
+        idShelf = intent.getStringExtra("SHELF_ID");
 
         // Create the search bar
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_bar1);
@@ -291,7 +300,8 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
         // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new ItemCursorAdapter(this, null, 0);
+        mCursorAdapter = new InventoryArrayAdapter(this,
+                database.getInventoryItemWithQuantities(shelfId));
         itemListView.setAdapter(mCursorAdapter);
 
         // Setup the item click listener
@@ -388,23 +398,22 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
         // Sort order
         switch (choice) {
-            case ASCENDING:
+            case ASCENDING -> {
                 DEFAULT_SORT_ORDER = DbContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE ASC";
                 sort_choice = 0;
-                break;
-            case DESCENDING:
+            }
+            case DESCENDING -> {
                 DEFAULT_SORT_ORDER = DbContract.ItemEntry.COLUMN_ITEM_NAME + " COLLATE NOCASE DESC";
                 sort_choice = 1;
-                break;
-            case OLDEST_FIRST:
+            }
+            case OLDEST_FIRST -> {
                 DEFAULT_SORT_ORDER = null;
                 sort_choice = 2;
-                break;
-            case NEWEST_FIRST:
+            }
+            case NEWEST_FIRST -> {
                 DEFAULT_SORT_ORDER = DbContract.ItemEntry._ID + " DESC";
                 sort_choice = 3;
-                break;
-
+            }
         }
 
         // Restart the LoaderManager so OnCreate can be called again with new parameters for the cursor
@@ -437,12 +446,12 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
+//        mCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+//        mCursorAdapter.swapCursor(null);
     }
 
 

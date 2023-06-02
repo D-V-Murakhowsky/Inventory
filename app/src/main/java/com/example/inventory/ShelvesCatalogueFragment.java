@@ -28,7 +28,6 @@ import com.example.inventory.data.DbContract;
 import com.example.inventory.data.DbHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-// TODO: 2018-07-08 add "tags" fields to the database
 public class ShelvesCatalogueFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DbHelper extends SQLiteOpenHelper{
 
@@ -156,7 +157,7 @@ public class DbHelper extends SQLiteOpenHelper{
         return searchResults;
     }
 
-    public HashMap<String, InventoryItem> getInventoryItemWithQuantities(String shelfIdValue){
+    public ArrayList<InventoryItem> getInventoryItemWithQuantities(String shelfIdValue){
         String [] projection = {ItemEntry._ID,
                                 ItemEntry.COLUMN_ITEM_NAME,
                                 ItemEntry.COLUMN_ITEM_SHELF_ID,
@@ -165,7 +166,7 @@ public class DbHelper extends SQLiteOpenHelper{
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection,
                 null, null,null);
 
-        HashMap<String, InventoryItem> searchResults = new HashMap<>();
+        ArrayList<InventoryItem> searchResults = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
                 int idColumnIndex = cursor.getColumnIndex( ItemEntry._ID );
@@ -175,11 +176,11 @@ public class DbHelper extends SQLiteOpenHelper{
 
                 if ((nameColumnIndex > -1) && (idColumnIndex > -1) &&
                         (shelfIdColumnIndex > -1) && (qtyColumnIndex > -1)){
-                    searchResults.put(cursor.getString(idColumnIndex),
-                            new InventoryItem(cursor.getString(nameColumnIndex),
-                                          Integer.valueOf(cursor.getString(qtyColumnIndex))
-                                    ));
-                }
+                    if (Objects.equals(cursor.getString(shelfIdColumnIndex), shelfIdValue)) {
+                        searchResults.add(new InventoryItem(cursor.getString(nameColumnIndex),
+                                                            Integer.valueOf(cursor.getString(qtyColumnIndex))
+                                ));
+                    }}
             }while(cursor.moveToNext());
         }
 

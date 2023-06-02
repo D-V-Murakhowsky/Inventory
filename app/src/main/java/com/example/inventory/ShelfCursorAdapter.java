@@ -34,9 +34,11 @@ public class ShelfCursorAdapter extends CursorAdapter {
 
         // Find the columns of item attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(DbContract.ShelfEntry.COLUMN_SHELF_NAME);
+        int idColumnIndex = cursor.getColumnIndex(DbContract.ShelfEntry._ID);
 
         // Read the item attributes from the Cursor for the current item
         String itemName = cursor.getString(nameColumnIndex);
+        String idColumn = cursor.getString(idColumnIndex);
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(itemName);
@@ -56,6 +58,7 @@ public class ShelfCursorAdapter extends CursorAdapter {
                         switch (item.getItemId()) {
                             case R.id.start_inventory:
                                 Intent intent = new Intent(context,  InventoryCatalogueActivity.class);
+                                intent.putExtra("SHELF_ID", idColumn);
                                 context.startActivity(intent);
                                 return true;
                             default:
