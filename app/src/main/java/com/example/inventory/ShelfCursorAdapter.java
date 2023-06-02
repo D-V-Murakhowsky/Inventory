@@ -3,10 +3,14 @@ package com.example.inventory;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.PopupMenu;
 
 import com.example.inventory.data.DbContract;
 
@@ -35,5 +39,31 @@ public class ShelfCursorAdapter extends CursorAdapter {
 
         // Update the TextViews with the attributes for the current pet
         nameTextView.setText(itemName);
+
+        TextView menuTextView = (TextView) view.findViewById(R.id.shelf_menu);
+        menuTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //creating a popup menu
+                PopupMenu popup = new PopupMenu(context, menuTextView);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.shelf_list_view_menu);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.start_inventory:
+                                //handle menu1 click
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                //displaying the popup
+                popup.show();
+            }
+        });
     }
 }

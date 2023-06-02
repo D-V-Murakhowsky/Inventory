@@ -46,4 +46,6 @@
     <string name="tag3">Тег 3</string>
     <string name="shelf_name">"Поличка"</string>
     <string name="edit_item">Редагування</string>
+    <string name="three_dots">⋮</string>
+    <string name="start_inventory_menu">Почати інвентаризацію</string>
 </resources>

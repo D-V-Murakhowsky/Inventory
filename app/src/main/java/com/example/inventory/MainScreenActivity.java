@@ -10,7 +10,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Map;
 
-// TODO: 2018-07-08 add "tags" fields to the database
 public class MainScreenActivity extends AppCompatActivity{
 
 
@@ -18,9 +17,9 @@ public class MainScreenActivity extends AppCompatActivity{
     ViewPager2 viewPager;
 
     Map<Integer, String> tabNames = Map.ofEntries(
-            Map.entry(0, "Товари"),
-            Map.entry(1, "Полички"),
-            Map.entry(2, "Нестача")
+            Map.entry(0, "Полички"),
+            Map.entry(1, "Товари")
+
     );
 
 

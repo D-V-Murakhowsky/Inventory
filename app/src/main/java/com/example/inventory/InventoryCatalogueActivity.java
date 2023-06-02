@@ -1,26 +1,21 @@
 package com.example.inventory;
 
-import android.content.ContentUris;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -32,14 +27,13 @@ import com.example.inventory.Search.SearchAdapter;
 import com.example.inventory.Search.SearchResult;
 import com.example.inventory.data.DbContract;
 import com.example.inventory.data.DbHelper;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsCatalogueFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class InventoryCatalogueActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     /**
      * Adapter for the ListView
@@ -106,14 +100,14 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     public int flag1 = 0;
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
 
         Log.e("catalog", "onStart");
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
 
         Log.e("catalog", "onResume");
@@ -123,7 +117,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
 
         flag1 = 1;
@@ -133,31 +127,17 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.item_catalog, container,false);
+        setContentView(R.layout.inventory_catalog);
 
         // Create a new instance of the database for access to the searchbar
-        database = new DbHelper( getActivity() );
+        database = new DbHelper(this);
 
         // Create the search bar
-        materialSearchBar = (MaterialSearchBar) view.findViewById(R.id.search_bar1);
+        materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_bar1);
         materialSearchBar.setCardViewElevation(0);
-        materialSearchBar.setPlaceHolder("Пошук");
-        materialSearchBar.setHint("Введіть назву для пошуку");
-
-//        try {
-//            Field searchEdit = materialSearchBar.getClass().getDeclaredField("searchEdit");
-//            searchEdit.setAccessible(true);
-//            final EditText editText = (EditText) searchEdit.get(materialSearchBar);
-//            assert editText != null;
-//            editText.setText("Пошук");
-//        } catch (NoSuchFieldException | IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
-//      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
 
         if (flag1 == 0) {
@@ -221,7 +201,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 
                 List<SearchResult> testResult1 = loadNewSearchResultList();
                 if(testResult1.isEmpty()) {
-                    Toast.makeText( requireActivity().getBaseContext(), "No Results Found",
+                    Toast.makeText(getBaseContext(), "No Results Found",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -233,22 +213,10 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 //                    Toast.makeText(getBaseContext(), "Search Success!",
 //                            Toast.LENGTH_LONG).show();
 
-                    Intent intent = new Intent( getActivity(), ItemViewActivity.class);
-
-                    Uri currentPetUri = ContentUris.withAppendedId(DbContract.ItemEntry.CONTENT_URI, testResult3);
-                    // Set the URI on the data field of the intent
-                    intent.setData(currentPetUri);
-
-                    flag1 = 1;
-                    materialSearchBar.clearSuggestions();
-                    // probably dont need this line
-                    materialSearchBar.disableSearch();
-
-                    startActivity(intent);
 
                 }
                 else{
-                    Toast.makeText( requireActivity().getBaseContext(), "No Results Found",
+                    Toast.makeText(getBaseContext(), "No Results Found",
                             Toast.LENGTH_LONG).show();
                 }
 
@@ -289,8 +257,8 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         });
 
         // On click method for suggestions
-        RecyclerView searchrv = view.findViewById(R.id.mt_recycler);
-        searchrv.addOnItemTouchListener(new RecyclerTouchListener( requireActivity().getApplicationContext(), searchrv, new RecyclerTouchListener.ClickListener() {
+        RecyclerView searchrv = findViewById(R.id.mt_recycler);
+        searchrv.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), searchrv, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
@@ -305,26 +273,6 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 //                Log.e("catalog", "position = " + String.valueOf(position));
 //                Log.e("catalog", "_id = " + String.valueOf(_id));
 //                Log.e("catalog", "testResult3 = " + String.valueOf(testResult3));
-
-
-                Intent intent = new Intent( getActivity(), ItemViewActivity.class);
-
-                // Form the content URI that represents the specific pet that was clicked on,
-                // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(DbContract.ItemEntry.CONTENT_URI, testResult3);
-                // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
-
-                Log.e("catalog", "list item click");
-                flag1 = 1;
-                materialSearchBar.clearSuggestions();
-                // probably dont need this line
-                materialSearchBar.disableSearch();
-
-                startActivity(intent);
             }
 
             @Override
@@ -335,57 +283,26 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         }));
 
         // Find the ListView which will be populated with the pet data
-        ListView itemListView = (ListView) view.findViewById(R.id.catalog_list);
+        ListView itemListView = (ListView) findViewById(R.id.catalog_list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
-        View emptyView = view.findViewById(R.id.empty_view);
+        View emptyView = findViewById(R.id.empty_view);
         itemListView.setEmptyView(emptyView);
 
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
         // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new ItemCursorAdapter(getActivity(), null, 0);
+        mCursorAdapter = new ItemCursorAdapter(this, null, 0);
         itemListView.setAdapter(mCursorAdapter);
-
-
-        // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.catalog_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent( getActivity(), ItemEditActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Setup the item click listener
         itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // Create new intent to go to {@link EditorActivity}
-                Intent intent = new Intent( getActivity(), ItemViewActivity.class);
-
-                // Form the content URI that represents the specific pet that was clicked on,
-                // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(DbContract.ItemEntry.CONTENT_URI, id);
-                // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
-
-                Log.e("catalog", "list item click");
-                flag1 = 1;
-                materialSearchBar.clearSuggestions();
-                materialSearchBar.disableSearch();
-
-                startActivity(intent);
             }
         });
 
         // Kick off the loader
-        getLoaderManager().initLoader(ITEM_LOADER, null, this);
-
-        return view;
+        getSupportLoaderManager().initLoader(ITEM_LOADER, null, this);
 
     }
 
@@ -429,64 +346,23 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
 //        return true;
 //
 //    }
-
+//
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        // User clicked on a menu option in the app bar overflow menu
-//        switch (item.getItemId()) {
-//            // Respond to a click on the "Delete all entries" menu option
-//            case R.id.action_delete_all_entries:
-//                // delete entries
-//                showDeleteAllConfirmationDialog();
-//                return true;
-//            case R.id.action_sort_all_entries:
-//                // sort entries
-//                showSortConfirmationDialog();
-//                return true;
+//        // Respond to a click on the "Delete all entries" menu option
+//        if (item.getItemId() == R.id.action_sort_all_entries) {// sort entries
+//            showSortConfirmationDialog();
+//            return true;
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    private void showDeleteAllConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder( requireActivity() );
-        builder.setMessage(R.string.delete_all_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button
-                deleteAllItems();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog and continue editing
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void deleteAllItems() {
-        int rowsDeleted = requireActivity().getApplicationContext().getContentResolver().delete(DbContract.ItemEntry.CONTENT_URI, null, null);
-        if (rowsDeleted >= 0) {
-            Toast.makeText( requireActivity(), "All items deleted", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText( requireActivity(), "An error occurred: Delete failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // TODO: 2018-07-08 put sortAllItems in setPositiveButton
     private void showSortConfirmationDialog() {
 
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder( requireActivity(), R.style.RadioDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.RadioDialogTheme);
         builder.setTitle(R.string.sort_dialog_msg);
         builder.setSingleChoiceItems(options, sort_choice, new DialogInterface.OnClickListener() {
             @Override
@@ -532,7 +408,7 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         }
 
         // Restart the LoaderManager so OnCreate can be called again with new parameters for the cursor
-        getLoaderManager().restartLoader(0, null, this);
+        getSupportLoaderManager().restartLoader(0, null, this);
 
     }
 
@@ -543,14 +419,13 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
         String[] projection = {
                 DbContract.ItemEntry._ID,
                 DbContract.ItemEntry.COLUMN_ITEM_NAME,
-                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
-                DbContract.ItemEntry.COLUMN_ITEM_SHELF_NAME};
+                DbContract.ItemEntry.COLUMN_ITEM_QUANTITY};
 
         Log.e("onCreateLoader", "DEFAULT_SORT_ORDER = " + DEFAULT_SORT_ORDER);
 
 
         // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(requireActivity(),   // Parent activity context
+        return new CursorLoader(this,   // Parent activity context
                 DbContract.ItemEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
@@ -561,12 +436,12 @@ public class ItemsCatalogueFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
     }
 

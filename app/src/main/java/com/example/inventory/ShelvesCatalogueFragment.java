@@ -100,14 +100,14 @@ public class ShelvesCatalogueFragment extends Fragment implements LoaderManager.
 //      LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         // Find the ListView which will be populated with the pet data
-        ListView itemListView = (ListView) view.findViewById(R.id.catalog_list);
+        ListView shelfListView = (ListView) view.findViewById(R.id.catalog_list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = view.findViewById(R.id.empty_view);
-        itemListView.setEmptyView(emptyView);
+        shelfListView.setEmptyView(emptyView);
 
         mCursorAdapter = new ShelfCursorAdapter(getActivity(), null, 0);
-        itemListView.setAdapter(mCursorAdapter);
+        shelfListView.setAdapter(mCursorAdapter);
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.catalog_fab);
@@ -120,7 +120,9 @@ public class ShelvesCatalogueFragment extends Fragment implements LoaderManager.
         });
 
         // Setup the item click listener
-        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+        shelfListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Create new intent to go to {@link EditorActivity}
