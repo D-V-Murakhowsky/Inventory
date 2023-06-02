@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
+import com.example.inventory.InventoryItem;
 import com.example.inventory.Search.SearchResult;
 import com.example.inventory.data.DbContract.ItemEntry;
 import com.example.inventory.data.DbContract.ShelfEntry;
@@ -148,6 +149,36 @@ public class DbHelper extends SQLiteOpenHelper{
                 if ((nameColumnIndex > -1) && (idColumnIndex > -1)){
                     searchResults.put(cursor.getString(idColumnIndex),
                             cursor.getString(nameColumnIndex));
+                }
+            }while(cursor.moveToNext());
+        }
+
+        return searchResults;
+    }
+
+    public HashMap<String, InventoryItem> getInventoryItemWithQuantities(String shelfIdValue){
+        String [] projection = {ItemEntry._ID,
+                                ItemEntry.COLUMN_ITEM_NAME,
+                                ItemEntry.COLUMN_ITEM_SHELF_ID,
+                                ItemEntry.COLUMN_ITEM_QUANTITY};
+
+        Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection,
+                null, null,null);
+
+        HashMap<String, InventoryItem> searchResults = new HashMap<>();
+        if(cursor.moveToFirst()){
+            do{
+                int idColumnIndex = cursor.getColumnIndex( ItemEntry._ID );
+                int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
+                int shelfIdColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_SHELF_ID );
+                int qtyColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY );
+
+                if ((nameColumnIndex > -1) && (idColumnIndex > -1) &&
+                        (shelfIdColumnIndex > -1) && (qtyColumnIndex > -1)){
+                    searchResults.put(cursor.getString(idColumnIndex),
+                            new InventoryItem(cursor.getString(nameColumnIndex),
+                                          Integer.valueOf(cursor.getString(qtyColumnIndex))
+                                    ));
                 }
             }while(cursor.moveToNext());
         }

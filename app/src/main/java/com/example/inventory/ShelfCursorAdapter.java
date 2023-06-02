@@ -1,6 +1,7 @@
 package com.example.inventory;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -54,7 +55,8 @@ public class ShelfCursorAdapter extends CursorAdapter {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.start_inventory:
-                                //handle menu1 click
+                                Intent intent = new Intent(context,  InventoryCatalogueActivity.class);
+                                context.startActivity(intent);
                                 return true;
                             default:
                                 return false;
