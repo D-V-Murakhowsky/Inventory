@@ -15,7 +15,6 @@ import com.example.inventory.data.DbContract.ShelfEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class DbHelper extends SQLiteOpenHelper{
@@ -157,7 +156,7 @@ public class DbHelper extends SQLiteOpenHelper{
         return searchResults;
     }
 
-    public ArrayList<InventoryItem> getInventoryItemWithQuantities(String shelfIdValue){
+    public ArrayList<InventoryItem> getInventoryItemsWithQuantities(String shelfIdValue){
         String [] projection = {ItemEntry._ID,
                                 ItemEntry.COLUMN_ITEM_NAME,
                                 ItemEntry.COLUMN_ITEM_SHELF_ID,

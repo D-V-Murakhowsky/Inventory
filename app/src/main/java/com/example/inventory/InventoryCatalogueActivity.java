@@ -3,7 +3,6 @@ package com.example.inventory;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +33,7 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InventoryCatalogueActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -82,9 +82,11 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
      */
     private static int sort_choice = 2;
 
-    private static final String shelfId = "1";
+    private static String idShelf = "1";
 
-    private String idShelf;
+    private static String nameShelf = "1";
+
+    private ArrayList<InventoryItem> inventoryState;
 
 
     RecyclerView recyclerView;
@@ -142,6 +144,7 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
         Intent intent = getIntent();
         idShelf = intent.getStringExtra("SHELF_ID");
+        nameShelf = intent.getStringExtra("SHELF_NAME");
 
         // Create the search bar
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_bar1);
@@ -300,14 +303,22 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
         // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new InventoryArrayAdapter(this,
-                database.getInventoryItemWithQuantities(shelfId));
+        inventoryState = database.getInventoryItemsWithQuantities(idShelf);
+        mCursorAdapter = new InventoryArrayAdapter(this, inventoryState);
+        mCursorAdapter.setNotifyOnChange(true);
         itemListView.setAdapter(mCursorAdapter);
 
         // Setup the item click listener
         itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                InventoryItem clickedItem = inventoryState.get(position);
+                if (clickedItem.itemQuantity > 1){
+                    clickedItem.itemQuantity -= 1;
+                } else if (clickedItem.itemQuantity == 1) {
+                    inventoryState.remove(position);
+                }
+                mCursorAdapter.notifyDataSetChanged();
             }
         });
 
@@ -446,6 +457,7 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+          Objects.requireNonNull(getSupportActionBar()).setTitle("Інвентаризація: " + nameShelf);
 //        mCursorAdapter.swapCursor(data);
     }
 

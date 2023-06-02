@@ -59,6 +59,7 @@ public class ShelfCursorAdapter extends CursorAdapter {
                             case R.id.start_inventory:
                                 Intent intent = new Intent(context,  InventoryCatalogueActivity.class);
                                 intent.putExtra("SHELF_ID", idColumn);
+                                intent.putExtra("SHELF_NAME", itemName);
                                 context.startActivity(intent);
                                 return true;
                             default:
