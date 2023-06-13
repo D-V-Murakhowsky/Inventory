@@ -91,7 +91,18 @@
 
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <!-- Price field -->
+                            <!-- Barcode field -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edit_item_barcode"
+                                    style="@style/EditorFieldStyle"
+                                    android:hint="@string/barcode"
+                                    android:inputType="numberSigned" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
 
                         </LinearLayout>

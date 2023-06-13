@@ -89,6 +89,12 @@ public class DbContract {
         public final static String COLUMN_ITEM_SHELF_NAME = "shelf_name";
 
         /**
+         * BarCode of the product
+         * Type: TEXT (String)
+         */
+        public final static String COLUMN_ITEM_BARCODE = "barcode";
+
+        /**
          * Description of the product
          * Type: TEXT (String)
          */

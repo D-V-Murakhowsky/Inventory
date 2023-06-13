@@ -64,6 +64,11 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
     private EditText mQuantityEditText;
 
     /**
+     * EditText field to enter the item's barcode
+     */
+    private EditText mBarcodeEditText;
+
+    /**
      * The identifier of shelf
      */
     private Integer shelfID;
