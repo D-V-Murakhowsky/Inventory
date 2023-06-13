@@ -168,6 +168,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
 
         mNameEditText = (EditText) findViewById(R.id.edit_item_name);
         mQuantityEditText = (EditText) findViewById(R.id.edit_item_quantity);
+        mBarcodeEditText = (EditText) findViewById(R.id.edit_item_barcode);
         mDescriptionEditText = (EditText) findViewById(R.id.edit_item_description);
         mItemImageView = (ImageView) findViewById(R.id.edit_item_image);
         mTag1EditText = (EditText) findViewById(R.id.edit_item_tag1);
@@ -177,6 +178,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
 
         mNameEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
+        mBarcodeEditText.setOnTouchListener(mTouchListener);
         mDescriptionEditText.setOnTouchListener(mTouchListener);
         mTag1EditText.setOnTouchListener(mTouchListener);
         mTag2EditText.setOnTouchListener(mTouchListener);
@@ -220,6 +222,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
+        String barcodeString = mBarcodeEditText.getText().toString().trim();
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String shelfIdString = shelfID.toString().trim();
         String shelfNameString = shelfName.trim();
@@ -248,6 +251,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
         ContentValues values = new ContentValues();
         values.put(DbContract.ItemEntry.COLUMN_ITEM_NAME, nameString);
         values.put(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY, quantityInteger);
+        values.put(DbContract.ItemEntry.COLUMN_ITEM_BARCODE, barcodeString);
         values.put(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION, descriptionString);
         values.put(DbContract.ItemEntry.COLUMN_ITEM_SHELF_ID, shelfIdString);
         values.put(DbContract.ItemEntry.COLUMN_ITEM_SHELF_NAME, shelfNameString);
@@ -359,6 +363,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
                 DbContract.ItemEntry._ID,
                 DbContract.ItemEntry.COLUMN_ITEM_NAME,
                 DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                DbContract.ItemEntry.COLUMN_ITEM_BARCODE,
                 DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 DbContract.ItemEntry.COLUMN_ITEM_TAG1,
                 DbContract.ItemEntry.COLUMN_ITEM_TAG2,
@@ -388,6 +393,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+            int barcodeColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_BARCODE);
             int descriptionColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
             int tag1ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG1);
             int tag2ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG2);
@@ -399,6 +405,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
             int quantity = data.getInt(quantityColumnIndex);
+            String barCode = data.getString(barcodeColumnIndex);
             String description = data.getString(descriptionColumnIndex);
             String tag1 = data.getString(tag1ColumnIndex);
             String tag2 = data.getString(tag2ColumnIndex);
@@ -412,6 +419,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mQuantityEditText.setText(String.format(":%d", quantity));
+            mBarcodeEditText.setText(barCode);
             mDescriptionEditText.setText(description);
             mTag1EditText.setText(tag1);
             mTag2EditText.setText(tag2);
@@ -433,7 +441,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
 
         mNameEditText.setText("");
         mQuantityEditText.setText("");
-
+        mBarcodeEditText.setText("");
         mDescriptionEditText.setText("");
         mTag1EditText.setText("");
         mTag2EditText.setText("");

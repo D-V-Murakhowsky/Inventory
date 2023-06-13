@@ -89,7 +89,7 @@
 
             </LinearLayout>
 
-            <!-- Quantity field -->
+            <!-- Shelf field -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,6 +119,40 @@
 
                 <TextView
                     android:id="@+id/item_shelf_field"
+                    style="@style/ItemFieldStyle" />
+
+            </LinearLayout>
+
+            <!-- Barcode field -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="42dp"
+                    android:maxHeight="42dp"
+                    android:paddingTop="16dp"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/quantity_icon"
+                    app:tint="@color/colorAccent" />
+
+
+                <TextView
+                    style="@style/ItemCategoryStyle"
+                    android:text="@string/barcode" />
+
+                <!-- Dummy view takes up maximum space to right align everything-->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/item_shelf_barcode"
                     style="@style/ItemFieldStyle" />
 
             </LinearLayout>

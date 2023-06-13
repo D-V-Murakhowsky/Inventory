@@ -52,6 +52,8 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
      */
 
     TextView quantityView;
+
+    TextView barcodeView;
     TextView descriptionView;
     TextView shelfNameView;
     TextView tag1View;
@@ -69,6 +71,7 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
 
         // find references to TextViews
         quantityView = (TextView) findViewById(R.id.item_quantity_field);
+        barcodeView = (TextView) findViewById(R.id.item_shelf_barcode);
         shelfNameView = (TextView) findViewById(R.id.item_shelf_field);
         descriptionView = (TextView) findViewById(R.id.item_description_field);
         tag1View = (TextView) findViewById(R.id.item_tag1_field);
@@ -165,6 +168,7 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
                 DbContract.ItemEntry._ID,
                 DbContract.ItemEntry.COLUMN_ITEM_NAME,
                 DbContract.ItemEntry.COLUMN_ITEM_QUANTITY,
+                DbContract.ItemEntry.COLUMN_ITEM_BARCODE,
                 DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION,
                 DbContract.ItemEntry.COLUMN_ITEM_SHELF_NAME,
                 DbContract.ItemEntry.COLUMN_ITEM_TAG1,
@@ -192,6 +196,7 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_NAME);
             int quantityColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_QUANTITY);
+            int barcodeColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_BARCODE);
             int descriptionColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_DESCRIPTION);
             int shelfNameIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_SHELF_NAME);
             int tag1ColumnIndex = data.getColumnIndex(DbContract.ItemEntry.COLUMN_ITEM_TAG1);
@@ -202,6 +207,7 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
             int quantity = data.getInt(quantityColumnIndex);
+            String barcode = data.getString(barcodeColumnIndex);
             String description = data.getString(descriptionColumnIndex);
             String shelfName = data.getString(shelfNameIndex);
             String tag1 = data.getString(tag1ColumnIndex);
@@ -221,10 +227,10 @@ public class ItemViewActivity extends AppCompatActivity implements LoaderManager
 
             // Update the views on the screen with the values from the database
             quantityView.setText(Integer.toString(quantity));
+            barcodeView.setText(barcode);
             shelfNameView.setText(shelfName);
             descriptionView.setText(description);
             imageView.setImageBitmap(theImage);
-
 
 
             // Initially no tags

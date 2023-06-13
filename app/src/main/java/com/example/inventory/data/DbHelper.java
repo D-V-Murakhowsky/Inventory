@@ -53,6 +53,7 @@ public class DbHelper extends SQLiteOpenHelper{
                 + ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_QUANTITY + " INTEGER DEFAULT 0, "
+                + ItemEntry.COLUMN_ITEM_BARCODE + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_SHELF_ID + " INTEGER NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_SHELF_NAME + " TEXT NOT NULL, "
                 + ItemEntry.COLUMN_ITEM_DESCRIPTION + " TEXT, "
