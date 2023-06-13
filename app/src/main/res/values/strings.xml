@@ -18,7 +18,7 @@
     <string name="hint_item_tag3">Тег 3</string>
     <string name="category_tag">Теги</string>
     <string name="cardview_shelf_label">Поличка:</string>
-    <string name="cardview_quantity_label">Доступно:&#160;</string>
+    <string name="cardview_quantity_label">Не знайдено:&#160;</string>
     <string name="editor_insert_item_successful">Записано</string>
     <string name="editor_insert_item_failed">Виникла помилка. Об\'єкт не записано.</string>
     <string name="action_delete_current_entry">Видалити</string>
