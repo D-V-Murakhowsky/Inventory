@@ -1,140 +1,143 @@
 package com.example.inventory;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.ToneGenerator;
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-public class BarcodeActivity extends AppCompatActivity {
+public class BarcodeActivity extends AppCompatActivity implements DecoratedBarcodeView.TorchListener {
 
-
-    private SurfaceView surfaceView;
-    private BarcodeDetector barcodeDetector;
-    private CameraSource cameraSource;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
-    private ToneGenerator toneGen1;
-    private TextView barcodeText;
-    private String barcodeData;
-
-
+    private CaptureManager capture;
+    private DecoratedBarcodeView scanner;
+    private String rotation, flash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.barcode_scan_layout);
-        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-        surfaceView = findViewById(R.id.surface_view);
-        barcodeText = findViewById(R.id.barcode_text);
-        initialiseDetectorsAndSources();
+
+        flash = "Off";
+        rotation = "Portrait";
+
+        scanner = findViewById(R.id.scanner);
+        scanner.setTorchListener(this);
+
+        capture = new CaptureManager(this, scanner);
+        capture.initializeFromIntent(getIntent(), savedInstanceState);
+        capture.decode();
+
+        load();
     }
 
-    private void initialiseDetectorsAndSources() {
+    public void switchFlashlight() {
 
-        //Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
+        if (flash.equals("Off")) {
 
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.ALL_FORMATS)
-                .build();
+            scanner.setTorchOn();
+        } else {
 
-        cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(1920, 1080)
-                .setAutoFocusEnabled(true) //you should add this feature
-                .build();
-
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(BarcodeActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        cameraSource.start(surfaceView.getHolder());
-                    } else {
-                        ActivityCompat.requestPermissions(BarcodeActivity.this, new
-                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-
-
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-                // Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                if (barcodes.size() != 0) {
-
-
-                    barcodeText.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            if (barcodes.valueAt(0).email != null) {
-                                barcodeText.removeCallbacks(null);
-                                barcodeData = barcodes.valueAt(0).email.address;
-                                barcodeText.setText(barcodeData);
-                                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-                            } else {
-
-                                barcodeData = barcodes.valueAt(0).displayValue;
-                                barcodeText.setText(barcodeData);
-                                toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
-
-                            }
-                        }
-                    });
-
-                }
-            }
-        });
+            scanner.setTorchOff();
+        }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
+    public void load() {
+
+        if (flash.equals("On")) {
+
+            scanner.setTorchOn();
+        } else {
+
+            scanner.setTorchOff();
+        }
+
+        if (rotation.equals("Portrait")) {
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        } else {
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        }
+
+        capture = new CaptureManager(this, scanner);
+        capture.decode();
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    public void rotate() {
+        if (rotation.equals("Portrait")) {
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+            capture = new CaptureManager(this, scanner);
+            capture.decode();
+
+            rotation = "Landscape";
+
+        } else {
+
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            capture = new CaptureManager(this, scanner);
+            capture.decode();
+
+            rotation = "Portrait";
+
+        }
+    }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        getSupportActionBar().hide();
-        cameraSource.release();
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_scanner, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSupportActionBar().hide();
-        initialiseDetectorsAndSources();
+        capture.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        capture.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        capture.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onTorchOn() {
+
+    }
+
+    @Override
+    public void onTorchOff() {
+
+    }
 }

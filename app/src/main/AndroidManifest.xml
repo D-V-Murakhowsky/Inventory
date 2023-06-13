@@ -44,6 +44,9 @@
             android:name="com.example.inventory.InventoryCatalogueActivity"
             android:parentActivityName="com.example.inventory.MainScreenActivity" />
         <activity
+            android:name="com.example.inventory.BarcodeActivity"
+            android:parentActivityName="com.example.inventory.MainScreenActivity" />
+        <activity
             android:name="com.example.inventory.ShelfViewActivity"
             android:parentActivityName="com.example.inventory.MainScreenActivity"
             android:theme="@style/noTitle" />
@@ -52,16 +55,6 @@
             android:name="com.example.inventory.data.DataProvider"
             android:authorities="com.example.inventory"
             android:exported="false" />
-        
-        <provider
-            android:authorities="com.example.barcodescanner.fileprovider"
-            android:name="androidx.core.content.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false" />
-
-        <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode" />
     </application>
 
 </manifest>

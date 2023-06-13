@@ -161,7 +161,8 @@ public class DbHelper extends SQLiteOpenHelper{
         String [] projection = {ItemEntry._ID,
                                 ItemEntry.COLUMN_ITEM_NAME,
                                 ItemEntry.COLUMN_ITEM_SHELF_ID,
-                                ItemEntry.COLUMN_ITEM_QUANTITY};
+                                ItemEntry.COLUMN_ITEM_QUANTITY,
+                                ItemEntry.COLUMN_ITEM_BARCODE};
 
         Cursor cursor = context.getContentResolver().query(ItemEntry.CONTENT_URI, projection,
                 null, null,null);
@@ -173,12 +174,14 @@ public class DbHelper extends SQLiteOpenHelper{
                 int nameColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_NAME );
                 int shelfIdColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_SHELF_ID );
                 int qtyColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_QUANTITY );
+                int barcodeColumnIndex = cursor.getColumnIndex( ItemEntry.COLUMN_ITEM_BARCODE );
 
                 if ((nameColumnIndex > -1) && (idColumnIndex > -1) &&
                         (shelfIdColumnIndex > -1) && (qtyColumnIndex > -1)){
                     if (Objects.equals(cursor.getString(shelfIdColumnIndex), shelfIdValue)) {
                         searchResults.add(new InventoryItem(cursor.getString(nameColumnIndex),
-                                                            Integer.valueOf(cursor.getString(qtyColumnIndex))
+                                                            Integer.valueOf(cursor.getString(qtyColumnIndex)),
+                                                            cursor.getString( barcodeColumnIndex )
                                 ));
                     }}
             }while(cursor.moveToNext());

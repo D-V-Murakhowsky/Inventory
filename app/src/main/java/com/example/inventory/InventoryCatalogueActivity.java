@@ -1,20 +1,25 @@
 package com.example.inventory;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
@@ -28,6 +33,9 @@ import com.example.inventory.Search.SearchAdapter;
 import com.example.inventory.Search.SearchResult;
 import com.example.inventory.data.DbContract;
 import com.example.inventory.data.DbHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
@@ -87,6 +95,8 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
     private static String nameShelf = "1";
 
     private ArrayList<InventoryItem> inventoryState;
+
+    Utils utils;
 
 
     RecyclerView recyclerView;
@@ -151,6 +161,8 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
         materialSearchBar.setCardViewElevation(0);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
+
+        utils = new Utils();
 
         if (flag1 == 0) {
             Log.e("catalog", "tried to set adapter");
@@ -239,17 +251,10 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
 //                recyclerView.setAdapter(null);
 
-                switch (buttonCode) {
-                    case MaterialSearchBar.BUTTON_NAVIGATION:
-                        Log.e("catalog", "button clicked");
-                        materialSearchBar.clearSuggestions();
-                        materialSearchBar.disableSearch();
-                        break;
-                    case MaterialSearchBar.BUTTON_SPEECH:
-                        break;
-                    default:
-                        break;
-
+                if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
+                    Log.e("catalog", "button clicked");
+                    materialSearchBar.clearSuggestions();
+                    materialSearchBar.disableSearch();
                 }
             }
         });
@@ -276,7 +281,6 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
 
                 //id works with original search list but not new???
 //                int _id = searchResultList.get(position)._id;
-// TODO: 2018-07-13 clean up code here since we dont need _id anymore now that we have the searchResult object
                 // need testResult1 to work for some reason???
                 List<SearchResult> testResult1 = loadNewSearchResultList();
                 SearchResult testResult2 = testResult1.get(position);
@@ -322,10 +326,37 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
             }
         });
 
+        // Setup FAB to open Barcode scanner
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.barcode_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.scanner((Activity) view.getContext());
+            }
+        });
+
         // Kick off the loader
         getSupportLoaderManager().initLoader(ITEM_LOADER, null, this);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        String scannedBarcode = intentResult.getContents();
+        Integer inventoryPosition = getPositionByBarcode(scannedBarcode);
+        if (inventoryPosition > -1){
+            InventoryItem clickedItem = inventoryState.get(inventoryPosition);
+            if (clickedItem.itemQuantity > 1){
+                clickedItem.itemQuantity -= 1;
+            } else if (clickedItem.itemQuantity == 1) {
+                inventoryState.remove(inventoryPosition);
+            }
+            mCursorAdapter.notifyDataSetChanged();
+        }
+     }
+
 
     private void startSearch(String s) {
 
@@ -464,6 +495,14 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 //        mCursorAdapter.swapCursor(null);
+    }
+
+    private Integer getPositionByBarcode(String barcode){
+        InventoryItem item = this.inventoryState.stream()
+                .filter(currentItem -> barcode.equals(currentItem.barcode))
+                .findFirst()
+                .orElse(null);
+        return this.inventoryState.indexOf(item);
     }
 
 
