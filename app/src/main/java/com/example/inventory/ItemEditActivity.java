@@ -418,7 +418,7 @@ public class ItemEditActivity extends AppCompatActivity implements LoaderManager
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mQuantityEditText.setText(String.format(":%d", quantity));
+            mQuantityEditText.setText(String.format("%d", quantity));
             mBarcodeEditText.setText(barCode);
             mDescriptionEditText.setText(description);
             mTag1EditText.setText(tag1);

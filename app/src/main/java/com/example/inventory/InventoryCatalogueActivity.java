@@ -320,7 +320,7 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
                 if (clickedItem.itemQuantity > 1){
                     clickedItem.itemQuantity -= 1;
                 } else if (clickedItem.itemQuantity == 1) {
-                    inventoryState.remove(position);
+                    inventoryState.remove(clickedItem);
                 }
                 mCursorAdapter.notifyDataSetChanged();
             }
@@ -345,13 +345,13 @@ public class InventoryCatalogueActivity extends AppCompatActivity implements Loa
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         String scannedBarcode = intentResult.getContents();
-        Integer inventoryPosition = getPositionByBarcode(scannedBarcode);
+        int inventoryPosition = getPositionByBarcode(scannedBarcode);
         if (inventoryPosition > -1){
             InventoryItem clickedItem = inventoryState.get(inventoryPosition);
             if (clickedItem.itemQuantity > 1){
                 clickedItem.itemQuantity -= 1;
             } else if (clickedItem.itemQuantity == 1) {
-                inventoryState.remove(inventoryPosition);
+                inventoryState.remove(clickedItem);
             }
             mCursorAdapter.notifyDataSetChanged();
         }
